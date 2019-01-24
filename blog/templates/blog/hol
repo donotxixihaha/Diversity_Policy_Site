@@ -16,7 +16,7 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
-              
+
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
@@ -62,12 +62,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
       $(document).ready(function() {
+
       var timeoutID = null;
+
       function findMember(str) {
         console.log('search: ' + str);
       }
+
+
       $('#s_bar2').keyup(function(err) {
-        var query = $("#s_bar2").val();
+        var query = $("#s_bar2").val(),
         clearTimeout(timeoutID);
         $.ajax({
         url: "/policy_suggest/?search=" + query,
@@ -82,10 +86,10 @@
             });
           }
         });
-        //console.log("handler function called! Data: " + query);
       });
     });
     </script>
+
 <script>
 
     function testJS() {

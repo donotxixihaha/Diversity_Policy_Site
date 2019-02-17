@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
-    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
-
+   <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script> don't think we two versions of jQuery? -->
 </head>
 
 <body>
@@ -90,79 +89,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-
-        <script>
-          $(document).ready(function() {
-
-          var timeoutID = null;
-
-          function findMember(str) {
-            console.log('search: ' + str);
-          }
-
-          $('#s_bar2').keyup(function(err) {
-            var query = $("#s_bar2").val();
-            clearTimeout(timeoutID);
-            $.ajax({
-            url: "/policy_suggest/?search=" + query,
-            type: 'GET',
-            dataType: 'json',
-            success: function(res) {
-                //console.log(res);
-                var tags = res.suggestions;
-                console.log(tags);
-                $( "#s_bar2" ).autocomplete({
-                    source: tags
-                });
-              }
-            });
-            //console.log("handler function called! Data: " + query);
-          });
-          });
-    </script>
-
-    <script>
-        function fallbackCopyTextToClipboard(text) {
-            var textArea = document.createElement("textarea");
-              textArea.value = text;
-              document.body.appendChild(textArea);
-              textArea.focus();
-              textArea.select();
-
-          try {
-            var successful = document.execCommand('copy');
-            var msg = successful ? 'successful' : 'unsuccessful';
-            console.log('Fallback: Copying text command was ' + msg);
-          } catch (err) {
-            console.error('Fallback: Oops, unable to copy', err);
-          }
-
-          document.body.removeChild(textArea);
-        }
-        function copyTextToClipboard(text) {
-          if (!navigator.clipboard) {
-            fallbackCopyTextToClipboard(text);
-            return;
-          }
-          navigator.clipboard.writeText(text).then(function() {
-            console.log('Async: Copying to clipboard was successful!');
-          }, function(err) {
-            console.error('Async: Could not copy text: ', err);
-          });
-        }
-
-        function CopyToClipboard(link) {
-          copyTextToClipboard(link);
-        };
-
-    </script>
-
-    <script>
-        window.onload = function () {
-            document.getElementById("s_bar2").value = sessionStorage.getItem("storing");
-        }
-    </script>
-
+        <script src="{% static 'js/policy_list.js' %}"></script>
 </body>
 </html>
 

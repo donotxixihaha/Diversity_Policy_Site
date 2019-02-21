@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Diversity Policy</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
-   <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script> don't think we two versions of jQuery? -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css" />
+    <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script> don't think we two versions of jQuery? -->
 </head>
 
 <body>
@@ -50,7 +52,7 @@
             <br>
             <div class="container">
             {% for hit in policies %}
-                {% if forloop.counter0 < 10 %}
+                <!--{% if forloop.counter0 < 10 %}-->
                 <div class="card border-0" style="padding: 1px">
 
                         <div class="card-header"><h2><a href="{{ hit.link }}">{{ hit.title }}</a></h2>
@@ -73,13 +75,47 @@
 
 
             <br>
-            <ul class="pagination justify-content-center">
-                    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item disabled"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item disabled"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item disabled"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-            </ul>
+            <!--<ul class="pagination justify-content-center">-->
+                    <!--<li class="page-item"><a class="page-link" href="#">Previous</a></li>-->
+                    <!--<li class="page-item"><a class="page-link" href="#">1</a></li>-->
+                    <!--<li class="page-item"><a class="page-link" href="#">2</a></li>-->
+                    <!--<li class="page-item"><a class="page-link" href="#">3</a></li>-->
+                    <!--<li class="page-item"><a class="page-link" href="#">Next</a></li>-->
+            <!--</ul>-->
+
+            <div class="pagination justify-content-center">
+
+              {% if policies.has_previous %}
+                <a class="pagination-action" href="?page=1">
+                 <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                </a>
+                <a class="pagination-action" href="?page={{ posts.previous_page_number }}">
+                  <i class="fa fa-angle-left" aria-hidden="true"></i>
+                </a>
+              {% endif %}
+
+              {% for num in policies.paginator.page_range %}
+
+                {% if policies.number == num %}
+                <span class="pagination-number pagination-current">{{ num }}</span>
+                {% elif num > policies.number|add:'-3' and num < policies.number|add:'3' %}
+                <a class="pagination-number" href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+
+              {% endfor %}
+
+              {% if policies.has_next %}
+                <a class="pagination-action" href="?page={{ policies.next_page_number }}">
+                  <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+                <a class="pagination-action" href="?page={{ policies.paginator.num_pages }}">
+                  <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                </a>
+              {% endif %}
+
+            </div>
+
+
         </div>
         <footer class="page-footer font-small blue pt-4">
                 <div class="footer-copyright text-center py-3">© 2018 Copyright:

@@ -1,10 +1,11 @@
-from django.shortcuts import render
 from django.utils import timezone
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from .models import Policy
 from .search import search, search_suggest
+from django.core.paginator import Paginator
+
 import json
 import ast
 
@@ -33,18 +34,24 @@ def policy_search(request):
     term = request.GET.get('search')
     policies = search(term)
 
-    page = int(request.GET.get('page', '1'))
-    start = (page - 1) * 10
-    end = start + 10
+    paginator = Paginator(policies, 5)
+
+    page = request.GET.get('page')
+
+    policies = paginator.get_page(page)
+
+    # page = int(request.GET.get('page', '1'))
+    # start = (page - 1) * 10
+    # end = start + 10
 
 
-    paginator = DSEPaginator(policies, 10)
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
+    # paginator = DSEPaginator(policies, 10)
+    # try:
+    #     posts = paginator.page(page)
+    # except PageNotAnInteger:
+    #     posts = paginator.page(1)
+    # except EmptyPage:
+    #     posts = paginator.page(paginator.num_pages)
 
     return render(request, 'blog/policy_list.html', {'policies': policies})
 

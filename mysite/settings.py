@@ -26,7 +26,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'seq5*nc-h#yrb4q-14h^fegrd_bx@v#(l#a^!%h(4s8f05kjrw'
-DEBUG = True
+DEBUG = False
 
 # Experimenting here
 ALLOWED_HOSTS = ["localhost", "https://stormy-stream-43261.herokuapp.com/"]
@@ -145,12 +145,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = './blog/staticfiles/'
-#STATIC_URL = '/staticfiles/'
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'staticfiles'),
-)
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+#STATIC_URL = './blog/staticfiles/'
+STATIC_URL = '/static/'
+
+# STATICFILES_DIRS = (
+#     #'/Diversity_Policy_Site/blog/static',
+#     os.path.join(BASE_DIR, '/static/'),
+# )
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 

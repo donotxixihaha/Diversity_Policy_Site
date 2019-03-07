@@ -22,8 +22,3 @@ $(document).ready(function() {
         //console.log("handler function called! Data: " + query);
     });
 });
-
-function testJS() {
-    var query = document.getElementById("s_bar2").value;
-    sessionStorage.setItem("storing", query);
-}

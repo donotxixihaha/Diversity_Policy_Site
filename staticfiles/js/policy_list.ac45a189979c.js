@@ -21,13 +21,7 @@ $(document).ready(function() {
             }
         });
             //console.log("handler function called! Data: " + query);
-
     });
-
-    //Save previous search query in the current search bar--get from URL
-    //Problem is that there is a tiny lag before it appears
-    const urlParams = new URLSearchParams(window.location.search);
-    $('#s_bar2').val(urlParams.get('search'));
 });
 
 function fallbackCopyTextToClipboard(text) {
@@ -65,6 +59,10 @@ function CopyToClipboard(link) {
 };
 
 window.onload = function () {
-//    const urlParams = new URLSearchParams(window.location.search);
-//    $('#s_bar2').val(urlParams.get('search'));
+    document.getElementById("s_bar2").value = sessionStorage.getItem("storing");
+
+       const urlParams = new URLSearchParams(window.location.search);
+       $('#s_bar2').val(urlParams.get('search'));
+
+
 }

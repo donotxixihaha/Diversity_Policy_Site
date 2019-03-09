@@ -38,20 +38,13 @@ def policy_search(request):
 
     page = request.GET.get('page')
 
-    policies = paginator.get_page(page)
+    try:
+        policies = paginator.get_page(page)
+    except PageNotAnInteger:
+        policies = paginator.get_page(1)
+    except EmptyPage:
+        policies = paginator.get_page(paginator.num_pages)
 
-    # page = int(request.GET.get('page', '1'))
-    # start = (page - 1) * 10
-    # end = start + 10
-
-
-    # paginator = DSEPaginator(policies, 10)
-    # try:
-    #     posts = paginator.page(page)
-    # except PageNotAnInteger:
-    #     posts = paginator.page(1)
-    # except EmptyPage:
-    #     posts = paginator.page(paginator.num_pages)
 
     return render(request, 'blog/policy_list.html', {'policies': policies})
 
@@ -105,3 +98,4 @@ def autocompleteModel(request):
     data.sort(key=lambda s: len(s))
 
     return JsonResponse({ 'suggestions': data })
+

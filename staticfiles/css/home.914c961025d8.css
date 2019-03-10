@@ -1,0 +1,26 @@
+body{
+    font-family:'Roboto', sans-serif;
+}
+
+#landing{
+    width:100vw;
+    height:100vh;
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.6),
+            rgba(0, 0, 0, 0.6)
+        ),
+        url("/static/images/patrick-robert-doyle-1281439-unsplash.084a466f917d.jpg");
+    background-size:cover;
+}
+
+#landing h1{
+    color:#fff;
+    font:2.5rem 'Overpass', sans-serif;
+}
+
+#hcontent{
+    width:50vw;
+    margin:0 auto;
+    padding:10px;
+}

@@ -77,10 +77,11 @@ def bulk_indexing():
                                                    abstract=row[13], text=row[14])[0]
         pass
 
+#currently gets 100 results--will need to figure out a way to get best number of potentially useful results
 def search(query):
     s = Search(index ='policy-index').query("multi_match", query=query,
                                            fields=["title", "school", "department", "administrator", "author", "state",
-                                                   "city", "latitude", "longitude", "link", "tags", "abstract", "text"], fuzziness = "AUTO")
+                                                   "city", "latitude", "longitude", "link", "tags", "abstract", "text"], fuzziness = "AUTO").extra(from_=0, size=100)
     response = s.execute()
     return response
 

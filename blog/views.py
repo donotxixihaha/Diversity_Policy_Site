@@ -34,7 +34,9 @@ def policy_search(request):
     term = request.GET.get('search')
     policies = search(term)
 
-    paginator = Paginator(policies, 5)
+    paginator = Paginator(policies, 10)
+
+    print("OAGDAS", paginator.num_pages)
 
     page = request.GET.get('page')
 
@@ -46,7 +48,7 @@ def policy_search(request):
         policies = paginator.get_page(paginator.num_pages)
 
 
-    return render(request, 'blog/policy_list.html', {'policies': policies})
+    return render(request, 'blog/policy_list.html', {'policies': policies, 'max_pages': paginator.num_pages})
 
 
 # Autocomplete function -- takes text as it is being typed into the search bar, runs a simple prefix search over

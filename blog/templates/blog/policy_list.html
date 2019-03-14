@@ -61,14 +61,10 @@
 
 
                 <!-- Trigger/Open The Modal -->
-                    <button id="myBtn">Create Citations</button>
+                    <button id="myBtn" onclick="showCites('{{hit.title}}')">Create Citations</button>
 
                     <!-- The Modal -->
                     <div id="myModal" class="modal">
-
-
-                        <!-- the content is currently only appearing for the first item when clicked ! Try changing js script to a function and adding an onclick to the button which triggers the function. Want the function to take in the current page's data too-->
-
                       <!-- Modal content -->
                       <div class="modal-content">
                         <span class="close">&times;</span>
@@ -78,9 +74,9 @@
                                 <div id="gs_citt">
                                     <table>
                                         <tbody>
-                                        <tr><th scope="row" class="gs_cith">MLA</th></tr>
-                                        <tr><th scope="row" class="gs_cith">APA</th></tr>
-                                        <tr><th scope="row" class="gs_cith">Chicago</th></tr>
+                                        <tr><th scope="row" class="gs_cith">MLA</th></tr><td id="mla"></td>
+                                        <tr><th scope="row" class="gs_cith">APA</th></tr><td id="apa"></td>
+                                        <tr><th scope="row" class="gs_cith">Chicago</th></tr><td id="chicago"></td>
                                         </tbody>
                                     </table>
                                 </div>
@@ -88,11 +84,6 @@
                       </div>
                     </div>
                         </div>
-
-
-
-
-
 
 
             </div>
@@ -158,34 +149,6 @@
 
 
 </div>
-
-<script>
-    // Get the modal
-    var modal = document.getElementById('myModal');
-
-    // Get the button that opens the modal
-    var btn = document.getElementById("myBtn");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks the button, open the modal
-    btn.onclick = function() {
-      modal.style.display = "block";
-    }
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-      modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
-</script>
 
 
 <footer class="page-footer font-small blue pt-4">

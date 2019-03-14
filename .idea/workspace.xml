@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="354b78ca-9050-46bf-bcda-a217842573ec" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/static/css/blog.css" beforeDir="false" afterPath="$PROJECT_DIR$/blog/static/css/blog.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blog/static/js/policy_list.js" beforeDir="false" afterPath="$PROJECT_DIR$/blog/static/js/policy_list.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blog/templates/blog/policy_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/blog/templates/blog/policy_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/blog.css" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/blog.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/blog.css.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/blog.css.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/js/policy_list.js" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/js/policy_list.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/js/policy_list.js.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/js/policy_list.js.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/staticfiles.json" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/staticfiles.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -46,16 +39,16 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="css" value="3" />
-          <entry key="html" value="438" />
-          <entry key="js" value="48" />
+          <entry key="html" value="669" />
+          <entry key="js" value="51" />
           <entry key="py" value="234" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSS" value="3" />
-          <entry key="HTML" value="438" />
-          <entry key="JavaScript" value="48" />
+          <entry key="HTML" value="669" />
+          <entry key="JavaScript" value="51" />
           <entry key="Python" value="234" />
         </counts>
       </usages-collector>
@@ -66,11 +59,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/blog/templates/blog/policy_list.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="69" column="261" selection-start-line="69" selection-start-column="261" selection-end-line="69" selection-end-column="261" />
+            <state relative-caret-position="133">
+              <caret line="151" lean-forward="true" selection-start-line="151" selection-end-line="151" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="e#3224#3231#1" expanded="true" />
@@ -80,11 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/blog/static/js/policy_list.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="411">
-              <caret line="70" selection-start-line="70" selection-end-line="70" />
+            <state relative-caret-position="138">
+              <caret line="65" lean-forward="true" selection-start-line="65" selection-end-line="65" />
             </state>
           </provider>
         </entry>
@@ -191,8 +184,8 @@
         <option value="$PROJECT_DIR$/blog/views.py" />
         <option value="$PROJECT_DIR$/blog/search.py" />
         <option value="$PROJECT_DIR$/blog/static/css/blog.css" />
-        <option value="$PROJECT_DIR$/blog/static/js/policy_list.js" />
         <option value="$PROJECT_DIR$/blog/templates/blog/policy_list.html" />
+        <option value="$PROJECT_DIR$/blog/static/js/policy_list.js" />
       </list>
     </option>
   </component>
@@ -529,22 +522,22 @@
     <entry file="file://$PROJECT_DIR$/blog/static/images/magnifying-glass.svg">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/blog/static/js/policy_list.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="411">
-          <caret line="70" selection-start-line="70" selection-end-line="70" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/blog/templates/blog/policy_list.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="69" column="261" selection-start-line="69" selection-start-column="261" selection-end-line="69" selection-end-column="261" />
+        <state relative-caret-position="133">
+          <caret line="151" lean-forward="true" selection-start-line="151" selection-end-line="151" />
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="e#3224#3231#1" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/blog/static/js/policy_list.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="65" lean-forward="true" selection-start-line="65" selection-end-line="65" />
         </state>
       </provider>
     </entry>

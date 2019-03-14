@@ -68,3 +68,7 @@ window.onload = function () {
 //    const urlParams = new URLSearchParams(window.location.search);
 //    $('#s_bar2').val(urlParams.get('search'));
 }
+
+function showCitations(){
+  document.getElementById('textInput').className="show";
+}

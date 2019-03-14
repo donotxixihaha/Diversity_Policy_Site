@@ -70,7 +70,6 @@ def bulk_indexing():
         except:
             row[8] = ""
             row[9] = ""
-        print(row[11])
         blog = models.Policy.objects.get_or_create(title=row[1], school=row[2], department=row[3], administrator=row[4],
                                                    author=row[5], state=row[6], city=row[7], latitude=row[8],
                                                    longitude=row[9], link=row[10], published_date=row[11], tags=row[12],

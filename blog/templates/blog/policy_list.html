@@ -18,90 +18,128 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar">
     <a class="navbar-brand" href="/">Diversity Policy</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    <form action="" method="GET" class="form-inline">
+        <svg width="20" height="20" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10.5" cy="10.5" r="9" stroke="#9D9D9D" stroke-width="3"></circle>
+            <rect x="16" y="18.1213" width="3" height="10" rx="1.5" transform="rotate(-45 16 18.1213)"
+                  fill="#9D9D9D"></rect>
+        </svg>
+        <input type="text" id="s_bar2" name="search" class="form-control mr-sm-2"
+               placeholder="Search with keywords here"
+               aria-label="Search">
+        <input class="btn btn-outline-primary my-2" type="submit" value="Search">
+    </form>
+    <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-    </button>
+    </button> -->
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
+    <!-- <div class="navbar">
+         <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
                 <a class="nav-link disabled" href="/">Contribute</a>
             </li>
         </ul>
-        <!--      <form action="" method="GET" class="form-inline my-2 my-lg-0">
+             <form action="" method="GET" class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" name="search" size="75" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-              </form> -->
-
-
-        <br>
-        <form action="" method="GET" class="form-inline justify-content-center">
-            <input type="text" id="s_bar2" name="search" size="75" class="form-control mr-sm-2" aria-label="Search">
-            <input class="btn btn-outline-primary my-2 my-sm-0" type="submit" value="Search">
-        </form>
-        <br>
-        <br>
-    </div>
+              </form>
+    </div> -->
 </nav>
-<div class="container-fluid">
-    <br>
-    <div class="container">
+<section class="container-fluid">
+    <aside>
+        <div id="rsum">
+            Search Results for:
+            <br>
+        </div>
+        <div class="pagination justify-content-center">
 
-        {% for hit in policies %}
-        <!--{% if forloop.counter0 < 10 %}-->
-        <div class="card border-0" style="padding: 1px">
+            {% if policies.has_previous %}
+            <a class="pagination-action" href="?{% param_replace page=1 %}">
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+            </a>
+            <a class="pagination-action" href="?{% param_replace page=policies.previous_page_number %}">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+            </a>
+            {% endif %}
 
-            <div class="card-header"><h2><a href="{{ hit.link }}">{{ hit.title }}</a></h2>
+            {% for num in policies.paginator.page_range %}
 
-                <input type="button" value="Copy Link" onclick="CopyToClipboard('{{hit.link}}')"/>
+            {% if policies.number == num %}
+            <span class="pagination-number pagination-current">{{ num }}</span>
+            {% elif num > policies.number|add:'-3' and num < policies.number|add:'3' %}
+            <a class="pagination-number" href="?{% param_replace page=num %}">{{ num }}</a>
+            {% endif %}
+
+            {% endfor %}
+
+            {% if policies.has_next %}
+
+            <!--There are still issues here with going back and forth but basic pagination is getting there-->
+
+            <a class="pagination-action" href="?{% param_replace page=policies.next_page_number %}">
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+            </a>
+            <a class="pagination-action" href="?{% param_replace page=max_pages %}">
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            </a>
 
 
+            {% endif %}
 
-                <!-- Trigger/Open The Modal -->
-                    <button id="myBtn" onclick="showCites('{{hit.title}}')">Create Citations</button>
-
-                    <!-- The Modal -->
-                    <div id="myModal" class="modal">
-                      <!-- Modal content -->
-                      <div class="modal-content">
-                        <span class="close">&times;</span>
-                          <h2 id="gs_cit-t" class="gs_md_hdr_t">Cite</h2>
-                          <div id="gs_cit-bdy" class="gs_md_bdy" style="max-height: 346px;">
-                            <div id="gs_citd" aria-live="assertive" data-u="/scholar?q=info:{id}:scholar.google.com/&amp;output=cite&amp;scirp={p}&amp;hl=en">
-                                <div id="gs_citt">
-                                    <table>
-                                        <tbody>
-                                        <tr><th scope="row" class="gs_cith">MLA</th></tr><td id="mla"></td>
-                                        <tr><th scope="row" class="gs_cith">APA</th></tr><td id="apa"></td>
-                                        <tr><th scope="row" class="gs_cith">Chicago</th></tr><td id="chicago"></td>
-                                        </tbody>
-                                    </table>
-                                </div>
+        </div>
+    </aside>
+    {% for hit in policies %}
+    <!--{% if forloop.counter0 < 10 %}-->
+    <article class="card border-0" style="padding: 1px">
+        <div class="card-header"><h2><a href="{{ hit.link }}">{{ hit.title }}</a></h2>
+            <input type="button" value="Copy Link" onclick="CopyToClipboard('{{hit.link}}')"/>
+            <!-- Trigger/Open The Modal -->
+            <button id="myBtn" onclick="showCites('{{hit.title}}')">Create Citations</button>
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2 id="gs_cit-t" class="gs_md_hdr_t">Cite</h2>
+                    <div id="gs_cit-bdy" class="gs_md_bdy" style="max-height: 346px;">
+                        <div id="gs_citd" aria-live="assertive"
+                             data-u="/scholar?q=info:{id}:scholar.google.com/&amp;output=cite&amp;scirp={p}&amp;hl=en">
+                            <div id="gs_citt">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row" class="gs_cith">MLA</th>
+                                    </tr>
+                                    <td id="mla"></td>
+                                    <tr>
+                                        <th scope="row" class="gs_cith">APA</th>
+                                    </tr>
+                                    <td id="apa"></td>
+                                    <tr>
+                                        <th scope="row" class="gs_cith">Chicago</th>
+                                    </tr>
+                                    <td id="chicago"></td>
+                                    </tbody>
+                                </table>
                             </div>
-                      </div>
-                    </div>
                         </div>
-
-
-            </div>
-
-            <div class="card-body">
-                <h3 class="school_name">{{ hit.school }}</h3>
-                <p class="abstract">{{ hit.abstract }}</p>
+                    </div>
+                </div>
             </div>
         </div>
-        {% else %}
+        <div class="card-body">
+            <h3 class="school_name">{{ hit.school }}</h3>
+            <p class="abstract">{{ hit.abstract }}</p>
+        </div>
+    </article>
+    {% else %}
 
-        {% endif %}
-        {% endfor %}
-    </div>
+    {% endif %}
+    {% endfor %}
 
-
-
-    <br>
     <!--<ul class="pagination justify-content-center">-->
     <!--<li class="page-item"><a class="page-link" href="#">Previous</a></li>-->
     <!--<li class="page-item"><a class="page-link" href="#">1</a></li>-->
@@ -110,51 +148,12 @@
     <!--<li class="page-item"><a class="page-link" href="#">Next</a></li>-->
     <!--</ul>-->
 
-    <div class="pagination justify-content-center">
 
-        {% if policies.has_previous %}
-        <a class="pagination-action" href="?{% param_replace page=1 %}">
-            <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-        </a>
-        <a class="pagination-action" href="?{% param_replace page=policies.previous_page_number %}">
-            <i class="fa fa-angle-left" aria-hidden="true"></i>
-        </a>
-        {% endif %}
-
-        {% for num in policies.paginator.page_range %}
-
-        {% if policies.number == num %}
-        <span class="pagination-number pagination-current">{{ num }}</span>
-        {% elif num > policies.number|add:'-3' and num < policies.number|add:'3' %}
-        <a class="pagination-number" href="?{% param_replace page=num %}">{{ num }}</a>
-        {% endif %}
-
-        {% endfor %}
-
-        {% if policies.has_next %}
-
-        <!--There are still issues here with going back and forth but basic pagination is getting there-->
-
-        <a class="pagination-action" href="?{% param_replace page=policies.next_page_number %}">
-            <i class="fa fa-angle-right" aria-hidden="true"></i>
-        </a>
-        <a class="pagination-action" href="?{% param_replace page=max_pages %}">
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-        </a>
+</section>
 
 
-        {% endif %}
-
-    </div>
-
-
-</div>
-
-
-<footer class="page-footer font-small blue pt-4">
-    <div class="footer-copyright text-center py-3">© 2018 Copyright:
-        <a href="/"> DiversityPolicy.com</a>
-    </div>
+<footer>
+    © 2019 <a href="/"> Diversity Policy</a>
 </footer>
 
 

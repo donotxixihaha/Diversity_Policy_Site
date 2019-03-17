@@ -21,7 +21,7 @@ a:hover{
 }
 
 .navbar{
-    justify-content:flex-end!important;
+    justify-content:flex-end;
 }
 
 .navbar a{
@@ -48,7 +48,7 @@ a:hover{
     color:#fff;
     font:calc(48px + (100 - 48) * ((80vw - 300px) / (1920 - 300))) 'Overpass', sans-serif;
     line-height:calc(48px + (100 - 48) * ((80vw - 300px) / (1920 - 300)));
-    margin-left:-7px;
+    margin-left:-8px;
 }
 
 #hcontent{
@@ -72,18 +72,21 @@ a:hover{
 }
 
 svg{
-    position:absolute;
     margin-left:10px;
-    /* Need to fix position on smaller screens */
+    z-index:9999;
 }
 
 .form-control{
     width:88%!important;
-    padding:.375rem 2.3rem!important;
+    padding:.375rem 2.3rem;
+    margin-left:-29px;
+    border:none;
 }
 
 .form-inline{
-    width:71%!important;
+    width:71%;
+    margin-left:-1px;
+    margin-top:-5px;
 }
 
 .btn{
@@ -101,6 +104,11 @@ svg{
 .btn-outline-primary:hover{
     background-color:var(--dark-grey);
     border-color:var(--dark-grey);
+}
+
+.btn-outline-primary:active{
+    background-color:var(--dark-grey)!important;
+    border-color:var(--dark-grey)!important;
 }
 
 footer{

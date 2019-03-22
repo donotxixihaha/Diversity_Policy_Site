@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="354b78ca-9050-46bf-bcda-a217842573ec" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/search.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mydatabase" beforeDir="false" afterPath="$PROJECT_DIR$/mydatabase" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/policy.csv" beforeDir="false" afterPath="$PROJECT_DIR$/policy.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-    </list>
+    <list default="true" id="354b78ca-9050-46bf-bcda-a217842573ec" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +60,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/blog/search.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
+            <state relative-caret-position="265">
               <caret line="94" column="164" selection-start-line="94" selection-start-column="164" selection-end-line="94" selection-end-column="164" />
               <folding>
                 <element signature="e#0#53#0" expanded="true" />
@@ -470,7 +464,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/blog/search.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
+        <state relative-caret-position="265">
           <caret line="94" column="164" selection-start-line="94" selection-start-column="164" selection-end-line="94" selection-end-column="164" />
           <folding>
             <element signature="e#0#53#0" expanded="true" />

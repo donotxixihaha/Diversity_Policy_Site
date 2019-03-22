@@ -6,6 +6,7 @@ from elasticsearch import Elasticsearch
 from . import models
 import csv
 from django.contrib.auth.models import User
+import datetime
 
 # This connections call should connect this to the elastic search cluster we have running on AWS via Elastic Cloud
 # I ran bulk_indexing() through a shell on it once and it seemed to have uploaded most if not all of our data
@@ -40,7 +41,10 @@ class PolicyIndex(DocType):
 def bulk_indexing():
     es = Elasticsearch()
     PolicyIndex.init(index='policy-index')
-    bulk(client=es, actions=(b.indexing() for b in models.Policy.objects.all().iterator()))
+
+    #unsure if this is needed, doesn't seem to be, can't remember why I had it in here
+    #bulk(client=es, actions=(b.indexing() for b in models.Policy.objects.all().iterator()))
+
     # code to go into the csv file of data and add it to elasticsearch
     f = open('policy.csv', encoding="ISO-8859-1")
     reader = csv.reader(f)
@@ -54,15 +58,23 @@ def bulk_indexing():
         date = row[11]
         date = date.split("/")
         try:
-            if int(date[2]) < 19:
+            if int(date[2]) <= 19:
                 date[2] = "20" + date[2]
             else:
                 date[2] = "19" + date[2]
             date = date[2] + "-" + date[0] + "-" + date[1]
         except:
-            #date = "1111-11-11"
             date = None
-        row[11] = date
+
+
+        # catch weird characters
+        try:
+            if datetime.datetime.strptime(date, '%Y-%m-%d'):
+                row[11] = date
+        except:
+            row[11] = None
+
+
         # handling of weird characters appearing in lat and long entries
         try:
             row[8] = float(row[8][:2])

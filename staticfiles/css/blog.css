@@ -127,7 +127,7 @@ aside{
 #rest a:hover{
     background:var(--beige-gold-dark);
     color:#fff;
-    border-color:(--beige-gold-dark);
+    border-color:var(--beige-gold-dark);
     text-decoration:none;
 }
 

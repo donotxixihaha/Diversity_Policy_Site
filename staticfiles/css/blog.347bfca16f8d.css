@@ -11,20 +11,32 @@ body{
     -webkit-font-smoothing:antialiased;
 }
 
+/*-- Nav --*/
+
 .navbar{
-    position:fixed;
     width:100vw;
-    height:150px;
+    height:100px;
     background:var(--dark-grey);
     top:0;
-    padding:0.5rem 50px 0 50px;
+    padding:0.5rem 50px 0.5rem 50px;
     z-index:9999;
 }
 
 .navbar-brand{
     color:#fff;
-    font:calc(32px + (72 - 32) * ((100vw - 300px) / (1920 - 300))) 'Overpass', sans-serif!important;
+    font:calc(32px + (48 - 32) * ((100vw - 300px) / (1920 - 300))) 'Overpass', sans-serif!important;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out
+    transition: all 0.1s ease-in-out;
 }
+
+.navbar-brand:hover{
+    color:var(--beige-gold-light);
+}
+
+/*-- Search Bar --*/
 
 svg{
     margin:-1px 0 0 10px;
@@ -35,6 +47,7 @@ svg{
     padding:.375rem 2.3rem;
     margin-left:-30px;
     border:none;
+    border-radius:0.15rem;
     flex-grow:1;
 }
 
@@ -47,6 +60,7 @@ svg{
     text-transform:uppercase;
     font-weight:700;
     letter-spacing:0.03em;
+    border-radius:0.15rem;
 }
 
 .btn-outline-primary{
@@ -69,9 +83,48 @@ svg{
     z-index:99999!important;
 }
 
+/*-- Search Results --*/
+
 .container-fluid{
-    padding:150px 50px 0 50px;
+    padding:0px 50px 0 50px;
 }
+
+.card{
+    margin-bottom:4%;
+    width:63%;
+    float:right;
+    border-radius:0.15rem;
+}
+
+.card-header a{
+    color:var(--beige-gold-dark);
+    font-weight:700;
+    text-transform:capitalize;
+}
+
+.myBtn{
+    background:transparent;
+    font-size:0.9em;
+    font-weight:500;
+    border:1px solid var(--dark-grey);
+    border-radius:0.15rem;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out
+    transition: all 0.1s ease-in-out;
+}
+
+.myBtn:hover{
+    background:var(--dark-grey);
+    color:#fff;
+}
+
+.school_name{
+    text-transform:capitalize;
+}
+
+/*-- Results Summary --*/
 
 aside{
     position:fixed;
@@ -80,18 +133,13 @@ aside{
     background:#fff;
     margin-right:60px;
     padding:15px;
-    border-radius:.25rem;
-}
-
-.card{
-    margin-bottom:4%;
-    width:63%;
-    float:right;
+    border-radius:.15rem;
 }
 
 .pagination {
     text-align: center;
-    margin-top: 1em;
+    margin:3em 0;
+    clear:both;
 }
 
 .pagination-number {
@@ -129,6 +177,7 @@ aside{
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  z-index:99999!important;
 }
 
 /* Modal Content */
@@ -162,8 +211,10 @@ aside{
     border: 1px solid #454545;
 }
 
+/*-- Footer --*/
+
 footer{
-    background:var(--dark-grey);
+    background:#000;
     color:#9D9D9D;
     padding:20px;
     text-align:center;

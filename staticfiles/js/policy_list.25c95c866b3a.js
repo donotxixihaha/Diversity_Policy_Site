@@ -28,6 +28,7 @@ $(document).ready(function() {
     //Problem is that there is a tiny lag before it appears
     const urlParams = new URLSearchParams(window.location.search);
     $('#s_bar2').val(urlParams.get('search'));
+    $('#query').text('"' + urlParams.get('search') + '"');
 });
 
 function fallbackCopyTextToClipboard(text) {
@@ -60,8 +61,12 @@ function copyTextToClipboard(text) {
     });
 }
 
-function CopyToClipboard(link) {
+function CopyToClipboard(id, link) {
     copyTextToClipboard(link);
+    var elem = document.getElementById(id);
+    $(elem).val($(elem).data("loading-text")); setTimeout(function(){
+        $(elem).val('Copy Link');
+    }, 1500);
 };
 
 function showCites(source) {
@@ -92,3 +97,6 @@ function showCites(source) {
       }
     }
 }
+
+var elements = document.querySelectorAll('.sticky');
+Stickyfill.add(elements);

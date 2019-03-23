@@ -29,7 +29,12 @@ a:hover{
     font-weight:500;
     padding:5px;
     border:1px solid var(--beige-gold-light);
-    border-radius:.25rem;
+    border-radius:.15rem;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out
+    transition: all 0.1s ease-in-out;
 }
 
 .navbar a:hover{
@@ -40,7 +45,7 @@ a:hover{
 
 #landing{
     width:100vw;
-    height:100vh;
+    height:120vh;
 }
 
 #landing h1{
@@ -53,7 +58,7 @@ a:hover{
 
 #hcontent{
     display:flex;
-    height:40%;
+    height:275px;
     position:absolute;
     top:0;
     right:0;
@@ -72,20 +77,25 @@ a:hover{
 }
 
 svg{
-    margin-left:10px;
     z-index:9999;
+}
+
+svg circle{
+    stroke:#fff;
+}
+
+svg rect{
+    fill:#fff;
 }
 
 .form-control{
     width:88%!important;
-    padding:.375rem 2.3rem;
-    margin-left:-29px;
     border:none;
+    border-radius:0.15rem 0 0 0.15rem;
 }
 
 .form-inline{
     width:71%;
-    margin-left:-1px;
     margin-top:-5px;
 }
 
@@ -93,6 +103,7 @@ svg{
     text-transform:uppercase;
     font-weight:700;
     letter-spacing:0.03em;
+    border-radius:0 0.15rem 0.15rem 0;
 }
 
 .btn-outline-primary{

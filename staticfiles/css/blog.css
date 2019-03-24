@@ -79,8 +79,8 @@ svg rect{
 }
 
 .btn-outline-primary, .btn-outline-primary:hover, .btn-outline-primary:active{
-    background-color:var(--beige-gold-dark);
-    border-color:var(--beige-gold-dark);
+    background-color:var(--beige-gold-dark)!important;
+    border-color:var(--beige-gold-dark)!important;
 }
 
 .btn-outline-primary:hover circle{
@@ -104,6 +104,27 @@ aside{
     width:25%;
     top:20px;
     margin-right:60px;
+}
+
+#rsum{
+    background:#fff;
+    font-weight:500;
+    font-size:18px;
+    padding:15px;
+    border-radius:0.15rem 0.15rem 0 0;
+}
+
+#query{
+    font-weight:400;
+}
+
+.count{
+    background:#fff;
+    font-weight:400;
+    margin-top:-5px;
+    padding:15px;
+    border-top:1px solid rgba(0, 0, 0, 0.125);
+    border-radius:0 0 0.15rem 0.15rem;
 }
 
 #rest{
@@ -131,18 +152,6 @@ aside{
     text-decoration:none;
 }
 
-#rsum{
-    background:#fff;
-    font-weight:500;
-    font-size:18px;
-    padding:15px;
-    border-radius:0.15rem;
-}
-
-#query{
-    font-weight:400;
-}
-
 /*-- Search Results --*/
 
 .container-fluid{
@@ -167,6 +176,10 @@ aside{
     color:var(--beige-gold-dark);
     font-weight:700;
     text-transform:capitalize;
+}
+
+.card h3{
+    font-size:1.5rem;
 }
 
 .myBtn{
@@ -289,7 +302,7 @@ aside{
 /*-- Footer --*/
 
 footer{
-    background:#000;
+    background:#111;
     color:#9D9D9D;
     padding:20px;
     text-align:center;

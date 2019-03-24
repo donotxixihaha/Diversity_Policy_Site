@@ -123,7 +123,7 @@ svg rect{
 }
 
 footer{
-    background:var(--dark-grey);
+    background:#111;
     color:#9D9D9D;
     padding:20px;
     text-align:center;

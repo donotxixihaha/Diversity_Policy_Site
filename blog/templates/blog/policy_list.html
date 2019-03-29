@@ -52,12 +52,10 @@
 <section class="container-fluid">
     <aside>
         <div id="rsum">
-            Search results for:
-            <p id="query"></p>
+            Filter Results
         </div>
-        <div class="count">Showing {{ policies.start_index }}–{{ policies.end_index }} of {{ policies.paginator.count }} </div>
         <div id="rest">
-            <a href="/">Contribute Policy</a>
+            <a href="/contribute_policy">Contribute Policy</a>
         </div>
     </aside>
     {% for hit in policies %}
@@ -111,6 +109,10 @@
     {% endfor %}
 
     <div class="pagination justify-content-center">
+
+
+        <!--Maybe make use of later-->
+        <!--<div class="count">Showing {{ policies.start_index }}–{{ policies.end_index }} of {{ policies.paginator.count }} </div>-->
 
         {% if policies.has_previous %}
         <a class="pagination-action" href="?{% param_replace page=1 %}">

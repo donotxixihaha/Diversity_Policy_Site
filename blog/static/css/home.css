@@ -30,6 +30,7 @@ a:hover{
     padding:5px;
     border:1px solid var(--beige-gold-light);
     border-radius:.15rem;
+    margin-right: 10px;
     -webkit-transition: all 0.1s ease-in-out;
     -moz-transition: all 0.1s ease-in-out;
     -o-transition: all 0.1s ease-in-out;

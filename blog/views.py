@@ -30,6 +30,12 @@ class DSEPaginator(Paginator):
 def search_home(request):
     return render(request, 'blog/search_home.html')
 
+def about_page(request):
+    return render(request, 'blog/about_page.html')
+
+def contribute_policy(request):
+    return render(request, 'blog/contribute_policy.html')
+
 def policy_search(request):
     term = request.GET.get('search')
     policies = search(term)

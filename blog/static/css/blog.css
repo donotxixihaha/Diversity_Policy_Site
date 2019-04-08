@@ -22,18 +22,9 @@ body{
     z-index:9999;
 }
 
-.navbar-brand{
-    color:#fff;
-    font:calc(32px + (48 - 32) * ((100vw - 300px) / (1920 - 300))) 'Overpass', sans-serif!important;
-    -webkit-transition: all 0.1s ease-in-out;
-    -moz-transition: all 0.1s ease-in-out;
-    -o-transition: all 0.1s ease-in-out;
-    -ms-transition: all 0.1s ease-in-out
-    transition: all 0.1s ease-in-out;
-}
-
-.navbar-brand:hover{
-    color:var(--beige-gold-dark);
+#logo{
+    width:25vw;
+    margin-top:17%;
 }
 
 /*-- Search Bar --*/
@@ -68,7 +59,7 @@ svg rect{
 
 .form-inline{
     width:69%;
-    margin-top:10px;
+    margin-top:4%;
 }
 
 .btn{
@@ -155,7 +146,7 @@ aside{
 /*-- Search Results --*/
 
 .container-fluid{
-    padding:0px 50px 0 50px;
+    padding:4% 50px 0 50px;
     min-height:100vh;
 }
 

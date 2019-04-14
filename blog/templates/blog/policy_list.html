@@ -56,7 +56,13 @@
             <input class="myBtn" id="{{forloop.counter}}-button" type="button" value="Copy Link"
                    data-loading-text="Copied" onclick="CopyToClipboard(this.id, '{{hit.link}}')"/>
             <!-- Trigger/Open The Modal -->
-            <button class="myBtn" onclick="showCites('{{hit.title}}')">Create Citations</button>
+            <button class="myBtn" onclick="showCites(this)"
+                    data-author="{{hit.author}}"
+                    data-title="{{hit.title}}"
+                    data-publisher="{{hit.school}}"
+                    data-pubdate="{{hit.published_date}}"
+                    data-url="{{hit.link}}"
+            >Create Citations</button>
             <!-- The Modal -->
             <div id="myModal" class="modal">
                 <!-- Modal content -->
@@ -70,7 +76,7 @@
                                 <table>
                                     <tbody>
                                     <tr>
-                                        <th scope="row" class="gs_cith">MLA</th>
+                                        <th scope="row" class="gs_cith">MLA 8</th>
                                     </tr>
                                     <td id="mla"></td>
                                     <tr>

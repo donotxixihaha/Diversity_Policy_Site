@@ -67,7 +67,7 @@ function CopyToClipboard(id, link) {
     $(elem).val($(elem).data("loading-text")); setTimeout(function(){
         $(elem).val('Copy Link');
     }, 1500);
-};
+}
 
 function showCites(source) {
     // Get the modal
@@ -81,7 +81,7 @@ function showCites(source) {
 
     modal.style.display = "block";
 
-    document.getElementById('mla').innerHTML = source;
+    document.getElementById('mla').innerHTML = getMLA(source);
     document.getElementById('apa').innerHTML = source;
     document.getElementById('chicago').innerHTML = source;
 
@@ -96,6 +96,62 @@ function showCites(source) {
         modal.style.display = "none";
       }
     }
+}
+
+function getMLA(source) {
+    var mla = "";
+    if(source.getAttribute("data-author")) {
+        mla += (formatAuthor(source.getAttribute("data-author").trim()));
+    }
+    if(source.getAttribute("data-title")) {
+        var title = source.getAttribute("data-title").split(" ");
+        if(title[title.length-1].includes("?") || title[title.length-1].includes("!") || title[title.length-1].includes(".")) {
+            mla += ('"' + source.getAttribute("data-title").trim() + '" ');
+        } else {
+            mla += ('"' + source.getAttribute("data-title").trim() + '." ');
+        }
+    }
+    if(source.getAttribute("data-publisher")) {
+        var pub = source.getAttribute("data-publisher").trim();
+        mla += (pub.italics() + ', ');
+    }
+    if(source.getAttribute("data-pubdate")) {
+        mla += (formatDate(source.getAttribute("data-pubdate").trim()) + ", ");
+    }
+    var url = source.getAttribute("data-url");
+    url = url.replace(/^\/\/|^.*?:(\/\/)?/, '');
+    mla += url.trim() + ". ";
+
+    var date = new Date();
+    var months = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+    mla+= "Accessed " + day + ' ' + months[monthIndex] + ' ' + year + ".";
+
+    return mla;
+}
+
+function formatAuthor(author) {
+    var formatted = author.split(" ");
+    if(formatted.length == 3) {
+        if(formatted[1].includes(".")) {
+            return formatted[2] + ', ' + formatted[0] + ' ' + formatted[1] + " ";
+        }
+        return formatted[2] + ', ' + formatted[0] + ' ' + formatted[1] + ". ";
+    } else {
+        return formatted[1] + ', ' + formatted[0] + ". ";
+    }
+}
+
+function formatDate(date) {
+    var months = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+    date = new Date(date);
+    date = new Date( date.getTime() - date.getTimezoneOffset() * -60000 );
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+    return day + ' ' + months[monthIndex] + ' ' + year;
 }
 
 var elements = document.querySelectorAll('.sticky');

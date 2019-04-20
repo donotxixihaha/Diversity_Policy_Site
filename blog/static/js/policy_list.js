@@ -82,8 +82,8 @@ function showCites(source) {
     modal.style.display = "block";
 
     document.getElementById('mla').innerHTML = getMLA(source);
-    document.getElementById('apa').innerHTML = source;
-    document.getElementById('chicago').innerHTML = source;
+    document.getElementById('apa').innerHTML = getAPA(source);
+    document.getElementById('chicago').innerHTML = getChicago(source);
 
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
@@ -101,11 +101,12 @@ function showCites(source) {
 function getMLA(source) {
     var mla = "";
     if(source.getAttribute("data-author")) {
-        mla += (formatAuthor(source.getAttribute("data-author").trim()));
+        mla += (formatAuthor(source.getAttribute("data-author").trim(), "mla"));
     }
     if(source.getAttribute("data-title")) {
         var title = source.getAttribute("data-title").split(" ");
-        if(title[title.length-1].includes("?") || title[title.length-1].includes("!") || title[title.length-1].includes(".")) {
+        if(title[title.length-1].includes("?") || title[title.length-1].includes("!")
+        || title[title.length-1].includes(".")) {
             mla += ('"' + source.getAttribute("data-title").trim() + '" ');
         } else {
             mla += ('"' + source.getAttribute("data-title").trim() + '." ');
@@ -116,7 +117,7 @@ function getMLA(source) {
         mla += (pub.italics() + ', ');
     }
     if(source.getAttribute("data-pubdate")) {
-        mla += (formatDate(source.getAttribute("data-pubdate").trim()) + ", ");
+        mla += (formatDate(source.getAttribute("data-pubdate").trim(), "mla") + ", ");
     }
     var url = source.getAttribute("data-url");
     url = url.replace(/^\/\/|^.*?:(\/\/)?/, '');
@@ -127,31 +128,128 @@ function getMLA(source) {
     var day = date.getDate();
     var monthIndex = date.getMonth();
     var year = date.getFullYear();
-    mla+= "Accessed " + day + ' ' + months[monthIndex] + ' ' + year + ".";
+    mla += "Accessed " + day + ' ' + months[monthIndex] + ' ' + year + ".";
 
     return mla;
 }
 
-function formatAuthor(author) {
-    var formatted = author.split(" ");
-    if(formatted.length == 3) {
-        if(formatted[1].includes(".")) {
-            return formatted[2] + ', ' + formatted[0] + ' ' + formatted[1] + " ";
+function getAPA(source) {
+    var apa = "";
+    if(source.getAttribute("data-author")) {
+        apa += (formatAuthor(source.getAttribute("data-author").trim(), "apa"));
+    }
+    if(source.getAttribute("data-title")) {
+        var title = source.getAttribute("data-title").split(" ");
+        if(title[title.length-1].includes("?") || title[title.length-1].includes("!")
+        || title[title.length-1].includes(".")) {
+            apa += (source.getAttribute("data-title").trim() + ' ');
+        } else {
+            apa += (source.getAttribute("data-title").trim() + '. ');
         }
-        return formatted[2] + ', ' + formatted[0] + ' ' + formatted[1] + ". ";
+    }
+    if(source.getAttribute("data-pubdate")) {
+        apa += ("(" + formatDate(source.getAttribute("data-pubdate").trim(), "apa") + "). ");
     } else {
-        return formatted[1] + ', ' + formatted[0] + ". ";
+        apa += "(n.d.). ";
+    }
+
+    apa += "Retrieved from " + source.getAttribute("data-url");
+    return apa;
+}
+
+function getChicago(source) {
+    var chicago = "";
+    if(source.getAttribute("data-author")) {
+        chicago += (formatAuthor(source.getAttribute("data-author").trim(), "chicago"));
+    }
+    if(source.getAttribute("data-title")) {
+        var title = source.getAttribute("data-title").split(" ");
+        if(title[title.length-1].includes("?") || title[title.length-1].includes("!")
+        || title[title.length-1].includes(".")) {
+            chicago += ('"' + source.getAttribute("data-title").trim() + '" ');
+        } else {
+            chicago += ('"' + source.getAttribute("data-title").trim() + '." ');
+        }
+    }
+    if(source.getAttribute("data-publisher")) {
+        chicago += (source.getAttribute("data-publisher").trim() + '. ');
+    }
+    if(source.getAttribute("data-pubdate")) {
+        chicago += (formatDate(source.getAttribute("data-pubdate").trim(), "chicago") + '. ');
+    } else {
+        var date = new Date();
+        var months2 = ["January", "February", "March", "April", "May", "June", "July", "August",
+            "September", "October", "November", "December"];
+        var day = date.getDate();
+        var monthIndex = date.getMonth();
+        var year = date.getFullYear();
+        chicago += "Accessed " + months2[monthIndex] + ' ' + day + ', ' + year + ". ";
+    }
+
+    chicago += source.getAttribute("data-url");
+    return chicago;
+}
+
+function formatAuthor(author, format) {
+    if(format == "mla" || format == "chicago") {
+        var formatted = author.split(" ");
+        if(formatted.length == 3) {
+            if(formatted[1].includes(".")) {
+                return formatted[2] + ', ' + formatted[0] + ' ' + formatted[1] + " ";
+            }
+            return formatted[2] + ', ' + formatted[0] + ' ' + formatted[1] + ". ";
+        } else {
+            return formatted[1] + ', ' + formatted[0] + ". ";
+        }
+    }
+    else if(format == "apa") {
+        var formatted = author.split(" ");
+        if(formatted.length == 3) {
+            return formatted[2] + ", " + formatted[0][0] + ". " + formatted[1] + " ";
+        }
+        else {
+            return formatted[1] + ", " + formatted[0][0] + ". ";
+        }
     }
 }
 
-function formatDate(date) {
-    var months = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
-    date = new Date(date);
-    date = new Date( date.getTime() - date.getTimezoneOffset() * -60000 );
-    var day = date.getDate();
-    var monthIndex = date.getMonth();
-    var year = date.getFullYear();
-    return day + ' ' + months[monthIndex] + ' ' + year;
+function formatDate(date, format) {
+    var pubdate = new Date(date);
+    pubdate = new Date( pubdate.getTime() - pubdate.getTimezoneOffset() * -60000 );
+    var day = pubdate.getDate();
+    var month = pubdate.getMonth();
+    var year = pubdate.getFullYear();
+    var months = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.",
+            "Sept.", "Oct.", "Nov.", "Dec."];
+    var months2 = ["January", "February", "March", "April", "May", "June", "July", "August",
+            "September", "October", "November", "December"];
+
+    if(date.split("-").length == 1) {
+        return year
+    }
+    else if(date.split("-").length == 2) {
+        if(format == "mla") {
+            return months[month] + ' ' + year;
+        }
+        else if(format == "apa") {
+            return year + ", " + months2[month];
+        }
+        else {
+            return months2 + ", " + year;
+        }
+    }
+    else if(date.split("-").length == 3) {
+        if(format == "mla") {
+            return day + ' ' + months[month] + ' ' + year;
+        }
+        else if(format == "apa") {
+            return year + ", " + months2[month] + " " + day;
+        }
+        else {
+            return months2[month] + " " + day + ", " + year;
+        }
+    }
+    else {}
 }
 
 var elements = document.querySelectorAll('.sticky');

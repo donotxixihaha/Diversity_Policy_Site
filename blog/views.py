@@ -1,10 +1,10 @@
 from django.utils import timezone
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render
-from django.views.generic.base import TemplateView
+from django.views.generic import TemplateView
 from .models import Policy
 from .search import search, search_suggest
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import json
 import ast
@@ -38,11 +38,11 @@ def contribute_policy(request):
 
 def policy_search(request):
     term = request.GET.get('search')
-    policies = search(term)
+    yr = request.GET.get('filter')
+    policies = search(term, yr)
+    all = search(term)
 
     paginator = Paginator(policies, 10)
-
-    print("OAGDAS", paginator.num_pages)
 
     page = request.GET.get('page')
 
@@ -53,9 +53,14 @@ def policy_search(request):
     except EmptyPage:
         policies = paginator.get_page(paginator.num_pages)
 
+    return render(request, 'blog/policy_list.html', {'policies': policies, 'all': all, 'max_pages': paginator.num_pages})
 
-    return render(request, 'blog/policy_list.html', {'policies': policies, 'max_pages': paginator.num_pages})
-
+# class FacetedSearchView(BaseFacetedSearchView):
+#     form_class = FacetedPolicySearchForm
+#     facet_fields = ['school', 'published year']
+#     template_name = 'policy_list.html'
+#     paginate_by = 3
+#     context_object_name = 'object_list'
 
 # Autocomplete function -- takes text as it is being typed into the search bar, runs a simple prefix search over
 # just the "title" field, and returns a list of the matches which will then be displayed as suggestions from the

@@ -99,14 +99,18 @@ aside{
 
 #rsum{
     background:#fff;
-    font-weight:500;
-    font-size:18px;
+    font-size:16px;
     padding:15px;
-    border-radius:0.15rem 0.15rem 0 0;
+    border-radius:0.15rem;
 }
 
-#query{
-    font-weight:400;
+#rsum h2{
+    font-size:18px;
+    font-weight:500;
+}
+
+#rsum input{
+    margin:2px;
 }
 
 .count{
@@ -173,7 +177,7 @@ aside{
     font-size:1.5rem;
 }
 
-.myBtn{
+.myBtn, .filter{
     background:transparent;
     font-size:0.9em;
     font-weight:500;
@@ -187,7 +191,7 @@ aside{
     transition: all 0.1s ease-in-out;
 }
 
-.myBtn:hover{
+.myBtn:hover, .filter:hover{
     background:var(--dark-grey);
     color:#fff;
 }

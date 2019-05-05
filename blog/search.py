@@ -1,3 +1,4 @@
+from datetime import date
 from elasticsearch_dsl.connections import connections
 from elasticsearch_dsl import DocType, Text, Date, Search, Integer, Completion, analyzer, tokenizer, Object, Q
 from elasticsearch_dsl.query import MultiMatch, Match
@@ -89,10 +90,12 @@ def bulk_indexing():
         pass
 
 #currently gets 100 results--will need to figure out a way to get best number of potentially useful results
-def search(query):
+def search(query, filter=None):
     s = Search(index ='policy-index').query("multi_match", query=query,
                                            fields=["title", "school", "department", "administrator", "author", "state",
                                                    "city", "latitude", "longitude", "link", "tags", "abstract", "text"], fuzziness = "AUTO").extra(from_=0, size=100)
+    if filter is not None:
+        s = s.filter('range', published_date={'gte': date(int(filter), 1, 1), 'lt': date(int(filter), 12, 31)})
     response = s.execute()
     return response
 

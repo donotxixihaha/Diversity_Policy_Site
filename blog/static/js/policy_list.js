@@ -28,8 +28,36 @@ $(document).ready(function() {
     //Problem is that there is a tiny lag before it appears
     const urlParams = new URLSearchParams(window.location.search);
     $('#s_bar2').val(urlParams.get('search'));
-    $('#query').text('"' + urlParams.get('search') + '"');
+    $('.query').each(function(){
+        $(this).val(urlParams.get('search'));
+    });
+
+    var years = new Set();
+    $('.filter').each(function(){
+        var filter = this.getAttribute("data-filter").split("-");
+        key = filter[0];
+        if(!years.has(key)){
+            years.add(key);
+            $(this).val(key);
+            this.setAttribute('data-filter', key)
+        } else {
+            $(this).css('display', 'none')
+        }
+    });
+
 });
+
+var yearFilter = document.querySelectorAll("[data-filter]");
+var yearFilterArray = Array.from(yearFilter);
+
+let sorted = yearFilterArray.sort(sorter);
+
+function sorter(a,b) {
+    if(a.dataset.filter < b.dataset.filter) return -1;
+    if(a.dataset.filter > b.dataset.filter) return 1;
+}
+
+sorted.forEach(e => document.querySelector("#yr-filter > form").appendChild(e));
 
 function fallbackCopyTextToClipboard(text) {
     var textArea = document.createElement("textarea");
@@ -251,6 +279,7 @@ function formatDate(date, format) {
     }
     else {}
 }
+
 
 var elements = document.querySelectorAll('.sticky');
 Stickyfill.add(elements);

@@ -44,38 +44,80 @@ a:hover{
     color:#fff;
 }
 
-#landing{
-    width:100vw;
-    height:120vh;
+.page{
+
+    height:100vh;
 }
 
-#landing h1{
-    width:71%;
-    color:#fff;
+.page h1{
     font:calc(48px + (100 - 48) * ((80vw - 300px) / (1920 - 300))) 'Overpass', sans-serif;
     line-height:calc(48px + (100 - 48) * ((80vw - 300px) / (1920 - 300)));
     margin-left:-8px;
 }
 
-#hcontent{
+.content{
     display:flex;
-    max-width:90%;
+    max-width:70%;
+    margin:auto;
+    color:#fff;
+    align-items:center;
+    flex-flow:column nowrap;
+}
+
+.content p{
+    font-size:calc(16px + (24 - 16) * ((80vw - 300px) / (1920 - 300)));
+    color:var(--dark-grey);
+}
+
+#landing{
+    max-width:90%!important;
     height:275px;
     position:absolute;
     top:0;
     right:0;
     bottom:0;
     left:0;
-    margin:auto;
     padding:10px 10px 10px 2%;
-    align-items:center;
-    flex-flow:column nowrap;
 }
 
-#hcontent p{
+#landing p{
     width:71%;
-    font-size:calc(16px + (24 - 16) * ((80vw - 300px) / (1920 - 300)));
+    color:#fff!important;
+}
+
+#landing h1{
+    width:71%;
     color:#fff;
+}
+
+#about, #contribute{
+    display:flex;
+    height:auto;
+    background:#f7f7f7;
+    padding:80px 100px 0px 40px;
+    align-items:start;
+}
+
+#contribute{
+    padding-bottom:100px;
+}
+
+#about img{
+    width:140px;
+    margin:35px 50px;
+}
+
+#contribute img{
+    width:140px;
+    margin:35px 50px;
+}
+
+#about > .content, #contribute > .content{
+    max-width:90%;
+    margin-top:50px;
+    margin-right: auto;
+    color:var(--dark-grey);
+    align-items:start;
 }
 
 svg{
@@ -122,6 +164,10 @@ svg rect{
 .btn-outline-primary:active{
     background-color:var(--dark-grey)!important;
     border-color:var(--dark-grey)!important;
+}
+
+#adv-search{
+    font-size:1rem;
 }
 
 footer{

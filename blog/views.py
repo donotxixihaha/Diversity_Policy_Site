@@ -38,7 +38,7 @@ def contribute_policy(request):
 
 def policy_search(request):
     term = request.GET.get('search')
-    yr = request.GET.get('filter')
+    yr = request.GET.getlist('filter')
     policies = search(term, yr)
     all = search(term)
 

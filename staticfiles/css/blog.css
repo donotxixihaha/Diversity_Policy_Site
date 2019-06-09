@@ -109,8 +109,9 @@ aside{
     font-weight:500;
 }
 
-#rsum input{
-    margin:2px;
+#rsum label{
+    display:block;
+    margin:0px 2px 0px 2px;
 }
 
 .count{

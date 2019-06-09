@@ -40,115 +40,108 @@
             <h2>Filters</h2>
             Year:
             <div id="yr-filter">
-            {% for hit in all %}
-                {% if hit.published_date is not None %}
-                <form method="GET">
+                <form method="GET" id="filters">
                     <input type="hidden" class="query" name="search" value=""/>
-                    <input class="filter" name="filter" type="submit" value="" data-filter="{{hit.published_date}}"/>
+                    {% for hit in all %}
+                        {% if hit.published_date is not None %}
+                            <input class="filter" name="filter" type="checkbox" value="" data-filter="{{hit.published_date}}"/>
+                        {% endif %}
+                    {% endfor %}
                 </form>
-                {% endif %}
-            {% endfor %}
             </div>
         </div>
         <div id="rest">
             <a href="/contribute_policy">Contribute Policy</a>
         </div>
     </aside>
-    {% for hit in policies %}
-    <article class="card border-0" style="padding: 1px">
-        <div class="card-header"><h2><a href="{{ hit.link }}">{{ hit.title }}</a></h2>
-            <input class="myBtn" id="{{forloop.counter}}-button" type="button" value="Copy Link"
-                   data-loading-text="Copied" onclick="CopyToClipboard(this.id, '{{hit.link}}')"/>
-            <!-- Trigger/Open The Modal -->
-            <button class="myBtn" onclick="showCites(this)"
-                    data-author="{{hit.author}}"
-                    data-title="{{hit.title}}"
-                    data-publisher="{{hit.school}}"
-                    data-pubdate="{{hit.published_date}}"
-                    data-url="{{hit.link}}"
-            >Create Citations</button>
-            <!-- The Modal -->
-            <div id="myModal" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <h2 id="gs_cit-t" class="gs_md_hdr_t">Cite</h2>
-                    <div id="gs_cit-bdy" class="gs_md_bdy" style="max-height: 346px;">
-                        <div id="gs_citd" aria-live="assertive"
-                             data-u="/scholar?q=info:{id}:scholar.google.com/&amp;output=cite&amp;scirp={p}&amp;hl=en">
-                            <div id="gs_citt">
-                                <table>
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row" class="gs_cith">MLA</th>
-                                    </tr>
-                                    <td id="mla"></td>
-                                    <tr>
-                                        <th scope="row" class="gs_cith">APA</th>
-                                    </tr>
-                                    <td id="apa"></td>
-                                    <tr>
-                                        <th scope="row" class="gs_cith">Chicago</th>
-                                    </tr>
-                                    <td id="chicago"></td>
-                                    </tbody>
-                                </table>
+    <section id="results">
+        {% for hit in policies %}
+        <article class="card border-0" style="padding: 1px">
+            <div class="card-header"><h2><a href="{{ hit.link }}">{{ hit.title }}</a></h2>
+                <input class="myBtn" id="{{forloop.counter}}-button" type="button" value="Copy Link"
+                       data-loading-text="Copied" onclick="CopyToClipboard(this.id, '{{hit.link}}')"/>
+                <!-- Trigger/Open The Modal -->
+                <button class="myBtn" onclick="showCites(this)"
+                        data-author="{{hit.author}}"
+                        data-title="{{hit.title}}"
+                        data-publisher="{{hit.school}}"
+                        data-pubdate="{{hit.published_date}}"
+                        data-url="{{hit.link}}"
+                >Create Citations</button>
+                <!-- The Modal -->
+                <div id="myModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2 id="gs_cit-t" class="gs_md_hdr_t">Cite</h2>
+                        <div id="gs_cit-bdy" class="gs_md_bdy" style="max-height: 346px;">
+                            <div id="gs_citd" aria-live="assertive"
+                                 data-u="/scholar?q=info:{id}:scholar.google.com/&amp;output=cite&amp;scirp={p}&amp;hl=en">
+                                <div id="gs_citt">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row" class="gs_cith">MLA</th>
+                                        </tr>
+                                        <td id="mla"></td>
+                                        <tr>
+                                            <th scope="row" class="gs_cith">APA</th>
+                                        </tr>
+                                        <td id="apa"></td>
+                                        <tr>
+                                            <th scope="row" class="gs_cith">Chicago</th>
+                                        </tr>
+                                        <td id="chicago"></td>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="card-body">
-            <h3 class="school_name">{{ hit.school }}</h3>
-            <p class="abstract">{{ hit.abstract }}</p>
-        </div>
-    </article>
-
-    {% endfor %}
-
-    <div class="pagination justify-content-center">
-
-
-        <!--Maybe make use of later-->
-        <!--<div class="count">Showing {{ policies.start_index }}–{{ policies.end_index }} of {{ policies.paginator.count }} </div>-->
-
-        {% if policies.has_previous %}
-        <a class="pagination-action" href="?{% param_replace page=1 %}">
-            <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-        </a>
-        <a class="pagination-action" href="?{% param_replace page=policies.previous_page_number %}">
-            <i class="fa fa-angle-left" aria-hidden="true"></i>
-        </a>
-        {% endif %}
-
-        {% for num in policies.paginator.page_range %}
-
-        {% if policies.number == num %}
-        <span class="pagination-number pagination-current">{{ num }}</span>
-        {% elif num > policies.number|add:'-3' and num < policies.number|add:'3' %}
-        <a class="pagination-number" href="?{% param_replace page=num %}">{{ num }}</a>
-        {% endif %}
-
+            <div class="card-body">
+                <h3 class="school_name">{{ hit.school }}</h3>
+                <p class="abstract">{{ hit.abstract }}</p>
+            </div>
+        </article>
         {% endfor %}
+        <div class="pagination justify-content-center">
+            <!--Maybe make use of later-->
+            <!--<div class="count">Showing {{ policies.start_index }}–{{ policies.end_index }} of {{ policies.paginator.count }} </div>-->
 
-        {% if policies.has_next %}
+            {% if policies.has_previous %}
+            <a class="pagination-action" href="?{% param_replace page=1 %}">
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+            </a>
+            <a class="pagination-action" href="?{% param_replace page=policies.previous_page_number %}">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+            </a>
+            {% endif %}
 
-        <!--There are still issues here with going back and forth but basic pagination is getting there-->
+            {% for num in policies.paginator.page_range %}
 
-        <a class="pagination-action" href="?{% param_replace page=policies.next_page_number %}">
-            <i class="fa fa-angle-right" aria-hidden="true"></i>
-        </a>
-        <a class="pagination-action" href="?{% param_replace page=max_pages %}">
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-        </a>
+            {% if policies.number == num %}
+            <span class="pagination-number pagination-current">{{ num }}</span>
+            {% elif num > policies.number|add:'-3' and num < policies.number|add:'3' %}
+            <a class="pagination-number" href="?{% param_replace page=num %}">{{ num }}</a>
+            {% endif %}
 
+            {% endfor %}
 
-        {% endif %}
+            {% if policies.has_next %}
 
-    </div>
+            <!--There are still issues here with going back and forth but basic pagination is getting there-->
 
-
+            <a class="pagination-action" href="?{% param_replace page=policies.next_page_number %}">
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+            </a>
+            <a class="pagination-action" href="?{% param_replace page=max_pages %}">
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            </a>
+            {% endif %}
+        </div>
+    </section>
 </section>
 
 

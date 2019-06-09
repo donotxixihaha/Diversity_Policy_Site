@@ -41,7 +41,7 @@ $(document).ready(function() {
             $(this).val(key);
             this.setAttribute('data-filter', key)
         } else {
-            $(this).css('display', 'none')
+            $(this).remove();
         }
     });
 
@@ -58,6 +58,34 @@ function sorter(a,b) {
 }
 
 sorted.forEach(e => document.querySelector("#yr-filter > form").appendChild(e));
+
+$(document).ready(function(){
+    $('.filter').each(function(){
+        $(this).wrap("<label></label>");
+    });
+
+    $('label').each(function(){
+        var yr = $(this).find("input").val();
+        this.innerHTML += "<span> " + yr + "</span>";
+    });
+
+    var filter_url = window.location.search;
+
+    $( ".filter" ).on( "click", function( event ) {
+        filter_url += ("&" + $(this).serialize());
+        window.history.pushState({}, null, filter_url);
+        $("#results").load(filter_url + " #results");
+        $(window).scrollTop(0);
+    });
+
+    $(document).on("click", ".pagination a", function( event ) {
+        event.preventDefault();
+        window.history.pushState({}, null, this.href);
+        $("#results").load(this.href + " #results");
+        $(window).scrollTop(0);
+    });
+
+});
 
 function fallbackCopyTextToClipboard(text) {
     var textArea = document.createElement("textarea");
@@ -279,6 +307,32 @@ function formatDate(date, format) {
     }
     else {}
 }
+
+$(document).ready(function() {
+    var keyword = $("#s_bar2").val();
+    var abstracts = [];
+    var desc = document.getElementsByClassName('abstract');
+    for(var i = 0, len = desc.length; i < len; i++) {
+        if(desc[i].innerHTML.indexOf(keyword) !== -1) {
+            abstracts.push(desc[i]);
+        }
+    }
+    var result = "";
+    for(abs in abstracts) {
+        var text = abstracts[abs].innerHTML;
+        var regex = new RegExp(keyword, 'g');
+        result += text.replace(regex, '<b>' + keyword +'</b>');
+        result += "|"
+    }
+    var abstracts_new = result.split("|");
+    var j = 0;
+    for(var i = 0, len = desc.length; i < len; i++) {
+        if(desc[i].innerHTML.indexOf(keyword) !== -1) {
+            desc[i].innerHTML = abstracts_new[j];
+            j++;
+        }
+    }
+});
 
 
 var elements = document.querySelectorAll('.sticky');

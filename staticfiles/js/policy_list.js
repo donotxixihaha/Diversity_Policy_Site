@@ -70,12 +70,22 @@ $(document).ready(function(){
     });
 
     var filter_url = window.location.search;
-
     $( ".filter" ).on( "click", function( event ) {
-        filter_url += ("&" + $(this).serialize());
-        window.history.pushState({}, null, filter_url);
-        $("#results").load(filter_url + " #results");
-        $(window).scrollTop(0);
+        var str = "&filter=" + this.getAttribute("data-filter");
+        console.log(str);
+        if($(this).prop("checked") == false) {
+            console.log(str);
+            filter_url = filter_url.replace(str, "");
+            window.history.pushState({}, null, filter_url);
+            $("#results").load(filter_url + " #results");
+            $(window).scrollTop(0);
+        }
+        else {
+            filter_url += ("&" + $(this).serialize());
+            window.history.pushState({}, null, filter_url);
+            $("#results").load(filter_url + " #results");
+            $(window).scrollTop(0);
+        }
     });
 
     $(document).on("click", ".pagination a", function( event ) {

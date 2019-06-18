@@ -13,16 +13,17 @@
 </head>
 <body>
 <nav class="navbar">
-    <a href="/contribute_policy">Contribute Policy</a>
-    <a href="/about_page">About</a>
+    <a href="/"><img id="logo" src="{% static 'images/div-pol-logo-black.svg' %}"/></a>
+    <a href="#about">About</a>
+    <a href="#contribute">Contribute Policy</a>
 </nav>
-<section class="page">
-    <div id="landing" class="content">
-        <h1>Diversity Policy</h1>
+<section id="landing" class="page">
+    <div id="inner-landing" class="content">
+        <h1>Search for Policy</h1>
         <p>Policy documents from higher education in an expansive and ever-growing database</p>
         <form action="policy/" method="GET" class="form-inline">
             <input type="text" id="s_bar2" name="search" class="form-control"
-                   placeholder="Search with keywords here"
+                   placeholder="Enter keywords here"
                    aria-label="Search" required>
             <button class="btn btn-outline-primary my-2" type="submit">
                 <svg width="20" height="20" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -32,7 +33,7 @@
                 </svg>
             </button>
         </form>
-        <p id="adv-search"><a>Advanced Search</a></p>
+        <!--<p id="adv-search"><a>Advanced Search</a></p>-->
     </div>
 </section>
 

@@ -6,12 +6,6 @@
 
 body{
     font-family:'Roboto', sans-serif;
-    background:
-        linear-gradient(
-            rgba(0, 0, 0, 0.6),
-            rgba(0, 0, 0, 0.6)
-        ),
-        url('/static/images/patrick-robert-doyle-1281439-unsplash.jpg') center/cover fixed;
     -moz-osx-font-smoothing:grayscale;
     -webkit-font-smoothing:antialiased;
 }
@@ -20,15 +14,28 @@ a:hover{
     text-decoration:none;
 }
 
-.navbar{
-    justify-content:flex-end;
+.navbar a:first-child{
+    border:none;
+    padding:0;
+    margin:0;
+}
+
+.navbar a:first-child:hover{
+    background-color:transparent;
+    border:none;
+}
+
+.navbar a:nth-child(2){
+    margin-left:auto;
+    margin-right:20px;
+    border-color:transparent;
 }
 
 .navbar a{
-    color:var(--beige-gold-light);
+    color:var(--beige-gold-dark);
     font-weight:500;
     padding:5px;
-    border:1px solid var(--beige-gold-light);
+    border:1px solid var(--beige-gold-dark);
     border-radius:.15rem;
     margin-right: 10px;
     -webkit-transition: all 0.1s ease-in-out;
@@ -44,9 +51,22 @@ a:hover{
     color:#fff;
 }
 
-.page{
+#logo{
+    width:18vw;
+    padding:10% 5% 2% 5%;
+}
 
-    height:100vh;
+#landing{
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.6),
+            rgba(0, 0, 0, 0.6)
+        ),
+        url('/static/images/patrick-robert-doyle-1281439-unsplash.jpg') center/cover fixed;
+}
+
+.page{
+    height:75vh;
 }
 
 .page h1{
@@ -69,7 +89,7 @@ a:hover{
     color:var(--dark-grey);
 }
 
-#landing{
+#inner-landing{
     max-width:90%!important;
     height:275px;
     position:absolute;
@@ -77,47 +97,60 @@ a:hover{
     right:0;
     bottom:0;
     left:0;
-    padding:10px 10px 10px 2%;
+    padding:45px 10px 10px 2%;
 }
 
-#landing p{
+#inner-landing p{
     width:71%;
     color:#fff!important;
 }
 
-#landing h1{
+#inner-landing h1{
     width:71%;
     color:#fff;
 }
 
-#about, #contribute{
+#about{
     display:flex;
     height:auto;
     background:#f7f7f7;
-    padding:80px 100px 0px 40px;
+    padding:100px 50px 100px 50px;
     align-items:start;
-}
-
-#contribute{
-    padding-bottom:100px;
+    justify-content:center;
 }
 
 #about img{
+    position:absolute;
     width:140px;
-    margin:35px 50px;
+    margin:-55px 30px 20px 30px;
 }
 
-#contribute img{
-    width:140px;
-    margin:35px 50px;
+#about p{
+    line-height:1.7em;
 }
 
-#about > .content, #contribute > .content{
-    max-width:90%;
+#about .content{
+    display:block;
     margin-top:50px;
-    margin-right: auto;
+    max-width:100%;
+    padding:70px;
+}
+
+.content h2{
     color:var(--dark-grey);
-    align-items:start;
+    font:2.2em 'Overpass', sans-serif;
+    line-height:1.2em;
+}
+
+.box{
+    width:629px;
+    min-height:450px;
+    background:#eee;
+    margin-right:20px;
+}
+
+.box:nth-of-type(2){
+    margin-right:0;
 }
 
 svg{
@@ -164,6 +197,10 @@ svg rect{
 .btn-outline-primary:active{
     background-color:var(--dark-grey)!important;
     border-color:var(--dark-grey)!important;
+}
+
+.ui-widget{
+    font-family:inherit;
 }
 
 #adv-search{

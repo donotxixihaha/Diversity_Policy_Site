@@ -86,6 +86,10 @@ svg rect{
     z-index:99999!important;
 }
 
+.ui-widget{
+    font-family:inherit;
+}
+
 /*-- Results Summary --*/
 
 aside{

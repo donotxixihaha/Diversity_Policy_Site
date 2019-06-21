@@ -13,16 +13,17 @@
 </head>
 <body>
 <nav class="navbar">
-    <a href="/contribute_policy">Contribute Policy</a>
-    <a href="/about_page">About</a>
+    <a href="/"><img id="logo" src="{% static 'images/div-pol-logo-black.svg' %}"/></a>
+    <a href="#about">About</a>
+    <a href="#about">Contribute Policy</a>
 </nav>
-<section class="page">
-    <div id="landing" class="content">
-        <h1>Diversity Policy</h1>
+<section id="landing" class="page">
+    <div id="inner-landing" class="content">
+        <h1>Search for Policy</h1>
         <p>Policy documents from higher education in an expansive and ever-growing database</p>
         <form action="policy/" method="GET" class="form-inline">
             <input type="text" id="s_bar2" name="search" class="form-control"
-                   placeholder="Search with keywords here"
+                   placeholder="Enter keywords here"
                    aria-label="Search" required>
             <button class="btn btn-outline-primary my-2" type="submit">
                 <svg width="20" height="20" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -32,27 +33,28 @@
                 </svg>
             </button>
         </form>
-        <p id="adv-search"><a>Advanced Search</a></p>
+        <!--<p id="adv-search"><a>Advanced Search</a></p>-->
     </div>
 </section>
 
 <section id="about" class="page">
-    <img src="{% static 'images/undraw_file_searching_duff.svg' %}"/>
-    <div class="content">
-        <h2>What is Diversity Policy?</h2>
-        <p>Diversity Policy is a public database of policy information from colleges and universities in the United States.
-            It is free for anyone to use and is meant as a public utility and is continually expanding
-            with new policy information.</p>
-    </div>
-</section>
-
-<section id="contribute" class="page">
-    <img src="{% static 'images/undraw_collecting_fjjl.svg' %}"/>
-    <div class="content">
-        <h2>Contribute to our policy database</h2>
-        <p>Diversity Policy strives to foster a community of policy researchers, working in tandem to add to the
-        public database of policy information. More news to come on how to get involved.</p>
-    </div>
+    <article class="box">
+        <img src="{% static 'images/undraw_file_searching_duff.svg' %}"/>
+        <div class="content">
+            <h2>What is Diversity Policy?</h2>
+            <p>Diversity Policy is a public database of policy information from colleges and universities in the United States.
+                It is free for anyone to use and is meant as a public utility and is continually expanding
+                with new policy information.</p>
+        </div>
+    </article>
+    <article class="box">
+        <img src="{% static 'images/undraw_collecting_fjjl.svg' %}"/>
+        <div class="content">
+            <h2>Contribute to Our Database</h2>
+            <p>Diversity Policy strives to foster a community of policy researchers, working in tandem to add to the
+            public database of policy information. More news to come on how to get involved.</p>
+        </div>
+    </article>
 </section>
 
 <footer>

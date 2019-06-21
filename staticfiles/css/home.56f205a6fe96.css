@@ -28,8 +28,9 @@ a:hover{
 
 .navbar a:nth-child(2){
     margin-left:auto;
-    margin-right:10px;
+    margin-right:20px;
     border:1px solid var(--beige-gold-dark);
+    border-radius:.15rem;
 }
 
 .navbar a{
@@ -63,7 +64,7 @@ a:hover{
             rgba(0, 0, 0, 0.6),
             rgba(0, 0, 0, 0.6)
         ),
-        url('/static/images/patrick-robert-doyle-1281439-unsplash.jpg') center/cover fixed;
+        url("/static/images/patrick-robert-doyle-1281439-unsplash.084a466f917d.jpg") center/cover fixed;
 }
 
 .page{

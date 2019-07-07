@@ -19,12 +19,11 @@ a:hover{
     padding:0;
     margin:0;
 }
-/**
+
 .navbar a:first-child:hover{
     background-color:transparent;
     border:none;
 }
-*/
 
 .navbar a:nth-child(2){
     margin-left:auto;
@@ -58,6 +57,8 @@ a:hover{
 }
 
 #landing{
+    display:flex;
+    justify-content:center;
     background:
         linear-gradient(
             rgba(0, 0, 0, 0.6),
@@ -67,7 +68,7 @@ a:hover{
 }
 
 .page{
-    height:75vh;
+    height:480px;
 }
 
 .page h1{
@@ -78,7 +79,6 @@ a:hover{
 
 .content{
     display:flex;
-    max-width:70%;
     margin:auto;
     color:#fff;
     align-items:center;
@@ -91,14 +91,7 @@ a:hover{
 }
 
 #inner-landing{
-    max-width:90%!important;
-    height:275px;
-    position:absolute;
-    top:0;
-    right:0;
-    bottom:0;
-    left:0;
-    padding:45px 10px 10px 2%;
+    width:90%!important;
 }
 
 #inner-landing p{
@@ -114,7 +107,6 @@ a:hover{
 #about{
     display:flex;
     height:auto;
-    background:#f7f7f7;
     padding:100px 50px 100px 50px;
     align-items:start;
     justify-content:center;
@@ -145,9 +137,13 @@ a:hover{
 
 .box{
     width:629px;
-    min-height:450px;
+    min-height:531px;
     background:#eee;
     margin-right:20px;
+}
+
+.box:nth-of-type(1) p{
+    font-size:1.4em;
 }
 
 .box:nth-of-type(2){
@@ -202,6 +198,7 @@ svg rect{
 
 .ui-widget{
     font-family:inherit;
+
 }
 
 #adv-search{
@@ -217,4 +214,111 @@ footer{
 
 footer a{
     color:#9D9D9D;
+}
+
+@media(min-width:1920px){
+    .box p{
+        font-size:21px!important;
+    }
+}
+
+@media(max-width:1130px){
+    #about{
+        padding:0px 50px 50px 50px;
+        display:block;
+    }
+
+    #about .content{
+        padding:100px 70px 70px 70px;
+    }
+
+    .box{
+        width:100%;
+        min-height:auto!important;
+    }
+
+    .box:nth-of-type(1) p{
+        font-size:calc(16px + (24 - 16) * ((80vw - 300px) / (1920 - 300)));
+    }
+
+}
+
+@media(max-width:800px){
+    #landing{
+        background-attachment:scroll;
+    }
+}
+
+@media(max-width:744px){
+    #logo{
+        width:28vw;
+    }
+}
+
+@media(max-width:625px){
+    .form-control{
+        width:80%!important;
+    }
+
+    .ui-widget{
+        width:51%!important;
+    }
+}
+
+@media(max-width:414px){
+    .navbar a{
+        font-size:0.75em;
+    }
+
+    .box{
+        background-color:#fff;
+        margin:20px 0px;
+        padding:20px;
+        display:flex;
+        flex-flow:column nowrap;
+        align-items:center;
+    }
+
+    #about{
+        padding:0;
+    }
+
+    #about img{
+        position:relative;
+        width:150px;
+        height:150px;
+        margin:20px 0 0 0;
+    }
+
+    .box:first-child img{
+        margin-left:-30px!important;
+    }
+
+    #about .content{
+        padding:0px 20px 0px 20px;
+        text-align:center;
+    }
+
+    .form-inline{
+        width:84%;
+        justify-content:center;
+    }
+
+    #inner-landing h1, #inner-landing p{
+        width:80%;
+    }
+
+    .ui-widget{
+        width:60.5%!important;
+    }
+}
+
+@media(max-width:360px){
+    #inner-landing{
+        width:auto!important;
+    }
+
+    .ui-widget{
+        width:67%!important;
+    }
 }

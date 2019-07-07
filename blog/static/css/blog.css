@@ -23,7 +23,8 @@ body{
 }
 
 #logo{
-    width:20vw;
+    height:5vw;
+    max-height:60px;
     margin-top:18%;
 }
 
@@ -98,7 +99,6 @@ aside{
     float:left;
     width:25%;
     top:20px;
-    margin-right:60px;
 }
 
 #rsum{
@@ -135,6 +135,7 @@ aside{
 #rest a{
     color:var(--beige-gold-light);
     font-weight:500;
+    font-size:14px;
     padding:5px;
     border:1px solid var(--beige-gold-light);
     border-radius:.15rem;

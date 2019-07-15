@@ -14,11 +14,10 @@ body{
 /*-- Nav --*/
 
 .navbar{
-    width:100vw;
-    height:100px;
+    width:100%;
     background:var(--dark-grey);
-    top:0;
-    padding:0.5rem 50px 0.5rem 50px;
+    padding:0;
+    margin-bottom:35px;
     z-index:9999;
 }
 
@@ -156,7 +155,7 @@ aside{
 /*-- Search Results --*/
 
 .container-fluid{
-    padding:4% 50px 0 50px;
+    padding:0 50px;
     min-height:100vh;
 }
 
@@ -322,4 +321,44 @@ footer a{
 footer a:hover{
     color:var(--beige-gold-dark);
     text-decoration:none;
+}
+
+@media(max-width:800px){
+    .form-inline{
+        width:100%;
+        margin-top:15px;
+        flex-flow:row;
+    }
+
+    #logo{
+        height:40px;
+    }
+
+    aside{
+        display:none;
+    }
+
+    #results{
+        margin-top:-25px;
+    }
+
+    .container-fluid{
+        padding:0 25px;
+    }
+
+    .card{
+        width:100%;
+        float:none;
+    }
+}
+
+
+@media(max-width:350px){
+    .card h2{
+        font-size:1.75rem;
+    }
+
+    .card h3{
+        font-size:1.25rem;
+    }
 }

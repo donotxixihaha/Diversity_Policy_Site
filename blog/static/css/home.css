@@ -27,13 +27,14 @@ a:hover{
 
 .navbar a:nth-child(2){
     margin-left:auto;
-    margin-right:10px;
-    border:1px solid var(--beige-gold-dark);
+    margin-right:20px;
+    border:none;
 }
 
 .navbar a{
     color:var(--beige-gold-dark);
     font-weight:500;
+    font-size:0.9em;
     padding:5px;
     border:1px solid var(--beige-gold-dark);
     border-radius:.15rem;

@@ -38,8 +38,8 @@ def contribute_policy(request):
 
 def policy_search(request):
     term = request.GET.get('search')
-    yr = request.GET.getlist('filter')
-    policies = search(term, yr)
+    fil = request.GET.getlist('filter')
+    policies = search(term, fil)
     all = search(term)
 
     paginator = Paginator(policies, 10)

@@ -54,6 +54,7 @@ a:hover{
 
 #logo{
     width:18vw;
+    max-width:200px;
     padding:10% 5% 2% 5%;
 }
 

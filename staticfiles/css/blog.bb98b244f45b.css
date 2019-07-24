@@ -100,6 +100,39 @@ aside{
     top:20px;
 }
 
+.panel{
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+	text-decoration:none;
+}
+
+.menu {
+	margin: 4rem auto;
+	max-width: 300px;
+	text-transform: uppercase;
+	font-weight: 700;
+	padding: 5px;
+}
+
+.icon {
+	font-size: 20px;
+}
+
+input#toggle {
+	display:none;
+}
+input#toggle ~ .dropdown {
+	display:none;
+}
+input#toggle:checked ~ .dropdown {
+	display:block;
+}
+
+.dropdown {
+	margin-top:7px;
+}
+
 #rsum{
     background:#fff;
     font-size:16px;

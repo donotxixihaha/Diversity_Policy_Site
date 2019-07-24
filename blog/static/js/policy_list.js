@@ -1,4 +1,23 @@
 $(document).ready(function() {
+
+    $(".panel").click(function(){
+        var icon = document.querySelector(".icon");
+        if(document.querySelector("#toggle").checked == false) {
+            icon.innerHTML = "–";
+        } else {
+            icon.innerHTML = "+";
+        }
+    });
+
+    $(".panel-two").click(function(){
+        var two = document.querySelector(".icon-two");
+        if(document.querySelector("#toggle-two").checked == false) {
+            two.innerHTML = "–";
+        } else {
+            two.innerHTML = "+";
+        }
+    });
+
     var timeoutID = null;
     function findMember(str) {
         console.log('search: ' + str);
@@ -32,50 +51,98 @@ $(document).ready(function() {
         $(this).val(urlParams.get('search'));
     });
 
-    var years = new Set();
+    var years = [];
+    var schools = [];
     $('.filter').each(function(){
-        var filter = this.getAttribute("data-filter").split("-");
-        key = filter[0];
-        if(!years.has(key)){
-            years.add(key);
-            $(this).val(key);
-            this.setAttribute('data-filter', key)
-        } else {
-            $(this).remove();
+        if(this.getAttribute("data-year") != null){
+            var year = this.getAttribute("data-year").split("-");
+            key = year[0];
+             if(!years.includes(key)){
+                years.push(key);
+                $(this).val(key);
+                this.setAttribute('data-year', key)
+            } else {
+                $(this).remove();
+            }
+        }
+        if(this.getAttribute("data-school") != null){
+            var school = this.getAttribute("data-school").toLowerCase().trim();
+            if(!schools.includes(school)){
+                schools.push(school);
+            } else {
+                $(this).remove();
+            }
         }
     });
 
 });
 
-var yearFilter = document.querySelectorAll("[data-filter]");
+
+var yearFilter = document.querySelectorAll("[data-year]");
 var yearFilterArray = Array.from(yearFilter);
 
 let sorted = yearFilterArray.sort(sorter);
-
 function sorter(a,b) {
-    if(a.dataset.filter < b.dataset.filter) return -1;
-    if(a.dataset.filter > b.dataset.filter) return 1;
+    if(a.dataset.year < b.dataset.year) return -1;
+    if(a.dataset.year > b.dataset.year) return 1;
 }
 
 sorted.forEach(e => document.querySelector("#yr-filter > form").appendChild(e));
 
+var schoolFilter = document.querySelectorAll("[data-school]");
+var schoolFilterArray = Array.from(schoolFilter);
+
+for(let i=0; i < schoolFilterArray.length; i++){
+    schoolFilterArray[i].setAttribute("data-school", schoolFilterArray[i].getAttribute("data-school").toLowerCase());
+}
+
+let sorted2 = schoolFilterArray.sort(sorter2);
+function sorter2(a,b) {
+    if(a.dataset.school < b.dataset.school) return -1;
+    if(a.dataset.school > b.dataset.school) return 1;
+}
+
+sorted2.forEach(e => document.querySelector("#school-filter > form").appendChild(e));
+
+String.prototype.decodeHTML = function() {
+    var map = {"gt":">" /* , … */};
+    return this.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);?/gi, function($0, $1) {
+        if ($1[0] === "#") {
+            return String.fromCharCode($1[1].toLowerCase() === "x" ? parseInt($1.substr(2), 16)  : parseInt($1.substr(1), 10));
+        } else {
+            return map.hasOwnProperty($1) ? map[$1] : $0;
+        }
+    });
+};
+
 $(document).ready(function(){
     $('.filter').each(function(){
         $(this).wrap("<label></label>");
+        if(this.getAttribute("data-school") != null){
+            $(this).val(this.getAttribute("data-school").toTitleCase());
+        }
     });
 
-    $('label').each(function(){
+    $('.dropdown label').each(function(){
         var yr = $(this).find("input").val();
         this.innerHTML += "<span> " + yr + "</span>";
     });
 
+    $('.dropdown-two label').each(function(){
+        var school = $(this).find("input").val();
+        this.innerHTML += "<span> " + school + "</span>";
+    });
+
     var filter_url = window.location.search;
     $( ".filter" ).on( "click", function( event ) {
-        var str = "&filter=" + this.getAttribute("data-filter");
-        console.log(str);
+        var str = "&filter=" + this.getAttribute("data-year");
+        if(this.getAttribute("data-school") != null) {
+            var school = encodeURIComponent(this.getAttribute("data-school").toTitleCase().trim());
+            var str2 = "&filter=" + school;
+        }
         if($(this).prop("checked") == false) {
-            console.log(str);
             filter_url = filter_url.replace(str, "");
+            filter_url = filter_url.replace(str2, "");
             window.history.pushState({}, null, filter_url);
             $("#results").load(filter_url + " #results");
             $(window).scrollTop(0);

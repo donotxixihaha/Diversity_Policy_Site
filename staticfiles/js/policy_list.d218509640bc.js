@@ -64,7 +64,7 @@ $(document).ready(function(){
         $(this).wrap("<label></label>");
     });
 
-    $('label').each(function(){
+    $('.dropdown label').each(function(){
         var yr = $(this).find("input").val();
         this.innerHTML += "<span> " + yr + "</span>";
     });

@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="{% static 'css/blog.css' %}" type="text/css"/>
-    <script src="{% static 'js/stickyfill.es6.js' %}"></script>
 </head>
 
 <body>
@@ -37,19 +36,39 @@
     </nav>
     <aside>
         <div id="rsum">
-            <h2>Filters</h2>
-            Year:
-            <div id="yr-filter">
-                <form method="GET" id="filters">
-                    <input type="hidden" class="query" name="search" value=""/>
-                    {% for hit in all %}
+            <h2>Filter by:</h2>
+            <label class="panel" for="toggle">Year<div class="icon">+</div></label>
+            <input type="checkbox" id="toggle">
+            <div class="dropdown">
+                <div id="yr-filter">
+                    <form method="GET" class="filters">
+                        <input type="hidden" class="query" name="search" value=""/>
+                        {% for hit in all %}
                         {% if hit.published_date is not None %}
-                            <input class="filter" name="filter" type="checkbox" value="" data-filter="{{hit.published_date}}"/>
+                        <input class="filter" name="filter" type="checkbox" value=""
+                               data-year="{{hit.published_date}}"/>
                         {% endif %}
-                    {% endfor %}
-                </form>
+                        {% endfor %}
+                    </form>
+                </div>
+            </div>
+            <label class="panel-two" for="toggle-two">School<div class="icon-two">+</div></label>
+            <input type="checkbox" id="toggle-two">
+            <div class="dropdown-two">
+                <div id="school-filter">
+                    <form method="GET" class="filters">
+                        <input type="hidden" class="query" name="search" value=""/>
+                        {% for hit in all %}
+                        {% if hit.school is not None %}
+                        <input class="filter" name="filter" type="checkbox" value="{{hit.school}}"
+                               data-school="{{hit.school}}"/>
+                        {% endif %}
+                        {% endfor %}
+                    </form>
+                </div>
             </div>
         </div>
+
         <div id="rest">
             <a href="/#contribute">Contribute Policy</a>
         </div>
@@ -67,7 +86,8 @@
                         data-publisher="{{hit.school}}"
                         data-pubdate="{{hit.published_date}}"
                         data-url="{{hit.link}}"
-                >Create Citations</button>
+                >Create Citations
+                </button>
                 <!-- The Modal -->
                 <div id="myModal" class="modal">
                     <!-- Modal content -->
@@ -153,6 +173,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="{% static 'js/to-title-case.js' %}"></script>
 <script src="{% static 'js/policy_list.js' %}"></script>
 </body>
 </html>

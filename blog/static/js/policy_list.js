@@ -66,7 +66,7 @@ $(document).ready(function() {
             }
         }
         if(this.getAttribute("data-school") != null){
-            var school = this.getAttribute("data-school").toLowerCase().trim();
+            var school = this.getAttribute("data-school").trim();
             if(!schools.includes(school)){
                 schools.push(school);
             } else {
@@ -75,50 +75,10 @@ $(document).ready(function() {
         }
     });
 
-});
-
-
-var yearFilter = document.querySelectorAll("[data-year]");
-var yearFilterArray = Array.from(yearFilter);
-
-let sorted = yearFilterArray.sort(sorter);
-function sorter(a,b) {
-    if(a.dataset.year < b.dataset.year) return -1;
-    if(a.dataset.year > b.dataset.year) return 1;
-}
-
-sorted.forEach(e => document.querySelector("#yr-filter > form").appendChild(e));
-
-var schoolFilter = document.querySelectorAll("[data-school]");
-var schoolFilterArray = Array.from(schoolFilter);
-
-for(let i=0; i < schoolFilterArray.length; i++){
-    schoolFilterArray[i].setAttribute("data-school", schoolFilterArray[i].getAttribute("data-school").toLowerCase());
-}
-
-let sorted2 = schoolFilterArray.sort(sorter2);
-function sorter2(a,b) {
-    if(a.dataset.school < b.dataset.school) return -1;
-    if(a.dataset.school > b.dataset.school) return 1;
-}
-
-sorted2.forEach(e => document.querySelector("#school-filter > form").appendChild(e));
-
-String.prototype.decodeHTML = function() {
-    var map = {"gt":">" /* , … */};
-    return this.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);?/gi, function($0, $1) {
-        if ($1[0] === "#") {
-            return String.fromCharCode($1[1].toLowerCase() === "x" ? parseInt($1.substr(2), 16)  : parseInt($1.substr(1), 10));
-        } else {
-            return map.hasOwnProperty($1) ? map[$1] : $0;
-        }
-    });
-};
-
-$(document).ready(function(){
     $('.filter').each(function(){
         $(this).wrap("<label></label>");
         if(this.getAttribute("data-school") != null){
+        console.log( this.getAttribute("data-school"));
             $(this).val(this.getAttribute("data-school").toTitleCase());
         }
     });
@@ -163,6 +123,45 @@ $(document).ready(function(){
     });
 
 });
+
+
+var yearFilter = document.querySelectorAll("[data-year]");
+var yearFilterArray = Array.from(yearFilter);
+
+let sorted = yearFilterArray.sort(sorter);
+function sorter(a,b) {
+    if(a.dataset.year < b.dataset.year) return -1;
+    if(a.dataset.year > b.dataset.year) return 1;
+}
+
+sorted.forEach(e => document.querySelector("#yr-filter > form").appendChild(e));
+
+var schoolFilter = document.querySelectorAll("[data-school]");
+var schoolFilterArray = Array.from(schoolFilter);
+
+for(let i=0; i < schoolFilterArray.length; i++){
+    schoolFilterArray[i].setAttribute("data-school", schoolFilterArray[i].getAttribute("data-school").toTitleCase());
+}
+
+let sorted2 = schoolFilterArray.sort(sorter2);
+function sorter2(a,b) {
+    if(a.dataset.school < b.dataset.school) return -1;
+    if(a.dataset.school > b.dataset.school) return 1;
+}
+
+sorted2.forEach(e => document.querySelector("#school-filter > form").appendChild(e));
+
+String.prototype.decodeHTML = function() {
+    var map = {"gt":">" /* , … */};
+    return this.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);?/gi, function($0, $1) {
+        if ($1[0] === "#") {
+            return String.fromCharCode($1[1].toLowerCase() === "x" ? parseInt($1.substr(2), 16)  : parseInt($1.substr(1), 10));
+        } else {
+            return map.hasOwnProperty($1) ? map[$1] : $0;
+        }
+    });
+};
+
 
 function fallbackCopyTextToClipboard(text) {
     var textArea = document.createElement("textarea");
@@ -410,7 +409,3 @@ $(document).ready(function() {
         }
     }
 });
-
-
-var elements = document.querySelectorAll('.sticky');
-Stickyfill.add(elements);

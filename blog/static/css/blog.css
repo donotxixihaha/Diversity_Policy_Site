@@ -374,7 +374,7 @@ footer a:hover{
     }
 
     .container-fluid{
-        max-width:70%;
+        max-width:1344px;
         margin:0 auto;
     }
 }

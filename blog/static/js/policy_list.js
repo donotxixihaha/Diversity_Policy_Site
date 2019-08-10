@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+    // Year filter dropdown
     $(".panel").click(function(){
         var icon = document.querySelector(".icon");
         if(document.querySelector("#toggle").checked == false) {
@@ -9,6 +10,7 @@ $(document).ready(function() {
         }
     });
 
+    // School filter dropdown
     $(".panel-two").click(function(){
         var two = document.querySelector(".icon-two");
         if(document.querySelector("#toggle-two").checked == false) {
@@ -23,6 +25,8 @@ $(document).ready(function() {
         console.log('search: ' + str);
     }
 
+
+    // Search bar autocomplete suggestions
     $('#s_bar2').keyup(function(err) {
         var query = $("#s_bar2").val();
         clearTimeout(timeoutID);
@@ -51,6 +55,7 @@ $(document).ready(function() {
         $(this).val(urlParams.get('search'));
     });
 
+    // Filters
     var years = [];
     var schools = [];
     $('.filter').each(function(){
@@ -75,10 +80,10 @@ $(document).ready(function() {
         }
     });
 
+    // Filter labels (years and school names)
     $('.filter').each(function(){
         $(this).wrap("<label></label>");
         if(this.getAttribute("data-school") != null){
-        console.log( this.getAttribute("data-school"));
             $(this).val(this.getAttribute("data-school").toTitleCase());
         }
     });
@@ -93,6 +98,8 @@ $(document).ready(function() {
         this.innerHTML += "<span> " + school + "</span>";
     });
 
+
+    // Load/unload filtered content without page refresh
     var filter_url = window.location.search;
     $( ".filter" ).on( "click", function( event ) {
         var str = "&filter=" + this.getAttribute("data-year");
@@ -115,6 +122,12 @@ $(document).ready(function() {
         }
     });
 
+    // Temp fix for back button not loading previous content after a filter is checked
+    $(window).on("popstate", function (e) {
+        location.reload();
+    });
+
+    // Scroll to top of results after navigating to a new page
     $(document).on("click", ".pagination a", function( event ) {
         event.preventDefault();
         window.history.pushState({}, null, this.href);
@@ -124,7 +137,7 @@ $(document).ready(function() {
 
 });
 
-
+// Sort filter labels
 var yearFilter = document.querySelectorAll("[data-year]");
 var yearFilterArray = Array.from(yearFilter);
 
@@ -162,7 +175,7 @@ String.prototype.decodeHTML = function() {
     });
 };
 
-
+// Copy link button
 function fallbackCopyTextToClipboard(text) {
     var textArea = document.createElement("textarea");
     textArea.value = text;
@@ -201,6 +214,8 @@ function CopyToClipboard(id, link) {
     }, 1500);
 }
 
+
+// Citations
 function showCites(source) {
     // Get the modal
     var modal = document.getElementById('myModal');
@@ -384,6 +399,8 @@ function formatDate(date, format) {
     else {}
 }
 
+
+// Bold search term(s) in abstract – does not work for multi-word queries
 $(document).ready(function() {
     var keyword = $("#s_bar2").val();
     var abstracts = [];

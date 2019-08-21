@@ -1,7 +1,6 @@
 from datetime import date
 from elasticsearch_dsl.connections import connections
-from elasticsearch_dsl import DocType, Text, Date, Search, Integer, Completion, analyzer, tokenizer, Object, Q, \
-    FacetedSearch, DateHistogramFacet
+from elasticsearch_dsl import DocType, Text, Date, Search, Integer, Completion, analyzer, tokenizer, Object, Q
 from elasticsearch_dsl.query import MultiMatch, Match
 from elasticsearch.helpers import bulk
 from elasticsearch import Elasticsearch
@@ -99,10 +98,21 @@ def search(query, filter=None):
                                                    "city", "latitude", "longitude", "link", "tags", "abstract", "text"],
                                            fuzziness="AUTO").extra(from_=0, size=100)
     if filter is not None and len(filter) > 0:
-        fil = []
+        years = []
+        schools = []
         for f in filter:
-            fil.append(Q('range', published_date={'gte': date(int(f), 1, 1), 'lt': date(int(f), 12, 31)}))
-        s = s.query("bool", filter=functools.reduce(operator.or_, fil))
+            try:
+                f = int(f)
+                years.append(Q('range', published_date={'gte': date(f, 1, 1), 'lt': date(f, 12, 31)}))
+            except ValueError:
+                schools.append(Q('match_phrase', school=f))
+        if len(years) > 0 and len(schools) == 0:
+            s = s.query("bool", filter=functools.reduce(operator.or_, years))
+        if len(schools) > 0 and len(years) == 0:
+            s = s.query("bool", filter=functools.reduce(operator.or_, schools))
+        if len(schools) > 0 and len(years) > 0:
+            combined = functools.reduce(operator.or_, years) & functools.reduce(operator.or_, schools)
+            s = s.query("bool", filter=combined)
     response = s.execute()
     return response
 

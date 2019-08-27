@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'livesync',
     'django.contrib.staticfiles',
     'blog',
 ]
@@ -52,8 +51,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'livesync.core.middleware.DjangoLiveSyncMiddleware'
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
     
 ]
 

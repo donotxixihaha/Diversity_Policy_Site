@@ -1,9 +1,32 @@
 $(document).ready(function() {
+
+    // Year filter dropdown
+    $(".panel").click(function(){
+        var icon = document.querySelector(".icon");
+        if(document.querySelector("#toggle").checked == false) {
+            icon.innerHTML = "–";
+        } else {
+            icon.innerHTML = "+";
+        }
+    });
+
+    // School filter dropdown
+    $(".panel-two").click(function(){
+        var two = document.querySelector(".icon-two");
+        if(document.querySelector("#toggle-two").checked == false) {
+            two.innerHTML = "–";
+        } else {
+            two.innerHTML = "+";
+        }
+    });
+
     var timeoutID = null;
     function findMember(str) {
         console.log('search: ' + str);
     }
 
+
+    // Search bar autocomplete suggestions
     $('#s_bar2').keyup(function(err) {
         var query = $("#s_bar2").val();
         clearTimeout(timeoutID);
@@ -32,36 +55,37 @@ $(document).ready(function() {
         $(this).val(urlParams.get('search'));
     });
 
-    var years = new Set();
+    // Filters
+    var years = [];
+    var schools = [];
     $('.filter').each(function(){
-        var filter = this.getAttribute("data-filter").split("-");
-        key = filter[0];
-        if(!years.has(key)){
-            years.add(key);
-            $(this).val(key);
-            this.setAttribute('data-filter', key)
-        } else {
-            $(this).remove();
+        if(this.getAttribute("data-year") != null){
+            var year = this.getAttribute("data-year").split("-");
+            key = year[0];
+             if(!years.includes(key)){
+                years.push(key);
+                $(this).val(key);
+                this.setAttribute('data-year', key)
+            } else {
+                $(this).remove();
+            }
+        }
+        if(this.getAttribute("data-school") != null){
+            var school = this.getAttribute("data-school").trim();
+            if(!schools.includes(school)){
+                schools.push(school);
+            } else {
+                $(this).remove();
+            }
         }
     });
 
-});
-
-var yearFilter = document.querySelectorAll("[data-filter]");
-var yearFilterArray = Array.from(yearFilter);
-
-let sorted = yearFilterArray.sort(sorter);
-
-function sorter(a,b) {
-    if(a.dataset.filter < b.dataset.filter) return -1;
-    if(a.dataset.filter > b.dataset.filter) return 1;
-}
-
-sorted.forEach(e => document.querySelector("#yr-filter > form").appendChild(e));
-
-$(document).ready(function(){
+    // Filter labels (years and school names)
     $('.filter').each(function(){
         $(this).wrap("<label></label>");
+        if(this.getAttribute("data-school") != null){
+            $(this).val(this.getAttribute("data-school").toTitleCase());
+        }
     });
 
     $('.dropdown label').each(function(){
@@ -69,13 +93,23 @@ $(document).ready(function(){
         this.innerHTML += "<span> " + yr + "</span>";
     });
 
+    $('.dropdown-two label').each(function(){
+        var school = $(this).find("input").val();
+        this.innerHTML += "<span> " + school + "</span>";
+    });
+
+
+    // Load/unload filtered content without page refresh
     var filter_url = window.location.search;
     $( ".filter" ).on( "click", function( event ) {
-        var str = "&filter=" + this.getAttribute("data-filter");
-        console.log(str);
+        var str = "&filter=" + this.getAttribute("data-year");
+        if(this.getAttribute("data-school") != null) {
+            var school = encodeURIComponent(this.getAttribute("data-school").toTitleCase().trim());
+            var str2 = "&filter=" + school;
+        }
         if($(this).prop("checked") == false) {
-            console.log(str);
             filter_url = filter_url.replace(str, "");
+            filter_url = filter_url.replace(str2, "");
             window.history.pushState({}, null, filter_url);
             $("#results").load(filter_url + " #results");
             $(window).scrollTop(0);
@@ -88,6 +122,12 @@ $(document).ready(function(){
         }
     });
 
+    // Temp fix for back button not loading previous content after a filter is checked
+    $(window).on("popstate", function (e) {
+        location.reload();
+    });
+
+    // Scroll to top of results after navigating to a new page
     $(document).on("click", ".pagination a", function( event ) {
         event.preventDefault();
         window.history.pushState({}, null, this.href);
@@ -97,6 +137,45 @@ $(document).ready(function(){
 
 });
 
+// Sort filter labels
+var yearFilter = document.querySelectorAll("[data-year]");
+var yearFilterArray = Array.from(yearFilter);
+
+let sorted = yearFilterArray.sort(sorter);
+function sorter(a,b) {
+    if(a.dataset.year < b.dataset.year) return -1;
+    if(a.dataset.year > b.dataset.year) return 1;
+}
+
+sorted.forEach(e => document.querySelector("#yr-filter > form").appendChild(e));
+
+var schoolFilter = document.querySelectorAll("[data-school]");
+var schoolFilterArray = Array.from(schoolFilter);
+
+for(let i=0; i < schoolFilterArray.length; i++){
+    schoolFilterArray[i].setAttribute("data-school", schoolFilterArray[i].getAttribute("data-school").toTitleCase());
+}
+
+let sorted2 = schoolFilterArray.sort(sorter2);
+function sorter2(a,b) {
+    if(a.dataset.school < b.dataset.school) return -1;
+    if(a.dataset.school > b.dataset.school) return 1;
+}
+
+sorted2.forEach(e => document.querySelector("#school-filter > form").appendChild(e));
+
+String.prototype.decodeHTML = function() {
+    var map = {"gt":">" /* , … */};
+    return this.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);?/gi, function($0, $1) {
+        if ($1[0] === "#") {
+            return String.fromCharCode($1[1].toLowerCase() === "x" ? parseInt($1.substr(2), 16)  : parseInt($1.substr(1), 10));
+        } else {
+            return map.hasOwnProperty($1) ? map[$1] : $0;
+        }
+    });
+};
+
+// Copy link button
 function fallbackCopyTextToClipboard(text) {
     var textArea = document.createElement("textarea");
     textArea.value = text;
@@ -135,6 +214,8 @@ function CopyToClipboard(id, link) {
     }, 1500);
 }
 
+
+// Citations
 function showCites(source) {
     // Get the modal
     var modal = document.getElementById('myModal');
@@ -318,6 +399,8 @@ function formatDate(date, format) {
     else {}
 }
 
+
+// Bold search term(s) in abstract – does not work for multi-word queries
 $(document).ready(function() {
     var keyword = $("#s_bar2").val();
     var abstracts = [];
@@ -343,7 +426,3 @@ $(document).ready(function() {
         }
     }
 });
-
-
-var elements = document.querySelectorAll('.sticky');
-Stickyfill.add(elements);

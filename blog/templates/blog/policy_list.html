@@ -32,9 +32,11 @@
                           fill="#9D9D9D"></rect>
                 </svg>
             </button>
+            <a id="hamburger" href="javascript:void(0)" onclick="openNav()">Filters</a>
         </form>
     </nav>
-    <aside>
+    <aside id="aside">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <div id="rsum">
             <h2>Filter by:</h2>
             <label class="panel" for="toggle">Year<div class="icon">+</div></label>
@@ -77,7 +79,7 @@
         {% for hit in policies %}
         <article class="card border-0" style="padding: 1px">
             <div class="card-header"><h2><a href="{{ hit.link }}">{{ hit.title }}</a></h2>
-                <input class="myBtn" id="{{forloop.counter}}-button" type="button" value="Copy Link"
+                <input id="copy" class="myBtn" id="{{forloop.counter}}-button" type="button" value="Copy Link"
                        data-loading-text="Copied" onclick="CopyToClipboard(this.id, '{{hit.link}}')"/>
                 <!-- Trigger/Open The Modal -->
                 <button class="myBtn" onclick="showCites(this)"
@@ -94,7 +96,7 @@
                     <div class="modal-content">
                         <span class="close">&times;</span>
                         <h2 id="gs_cit-t" class="gs_md_hdr_t">Cite</h2>
-                        <div id="gs_cit-bdy" class="gs_md_bdy" style="max-height: 346px;">
+                        <div id="gs_cit-bdy" class="gs_md_bdy">
                             <div id="gs_citd" aria-live="assertive"
                                  data-u="/scholar?q=info:{id}:scholar.google.com/&amp;output=cite&amp;scirp={p}&amp;hl=en">
                                 <div id="gs_citt">

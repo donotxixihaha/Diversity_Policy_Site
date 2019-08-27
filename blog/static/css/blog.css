@@ -41,6 +41,10 @@ a{
     margin-top:18%;
 }
 
+#hamburger{
+    display:none;
+}
+
 /*-- Search Bar --*/
 
 svg{
@@ -106,10 +110,14 @@ svg rect{
 
 /*-- Results Summary --*/
 
-aside{
+#aside{
     float:left;
     width:25%;
     top:10px;
+}
+
+.closebtn{
+    display:none;
 }
 
 #rsum{
@@ -272,6 +280,7 @@ input#toggle:checked ~ .dropdown, input#toggle-two:checked ~ .dropdown-two{
   padding: 20px;
   border: none;
   width: 80%;
+  word-break:break-word;
 }
 
 /* The Close Button */
@@ -388,6 +397,15 @@ footer a:hover{
 }
 
 @media(max-width:800px){
+    #hamburger{
+        display:inline-block;
+        background:#fff;
+        padding:7px;
+        margin-left:10px;
+        border-radius:0.15rem;
+        color:var(--dark-grey);
+    }
+
     .form-inline{
         width:100%;
         margin-top:15px;
@@ -398,12 +416,58 @@ footer a:hover{
         height:40px;
     }
 
-    aside{
+    #aside{
+        background:#fff;
+        position:fixed;
+        height:100vh;
+        width:0;
+        top:0;
+        right:0;
+        padding-top:70px;
+        z-index:99999;
+        overflow:scroll;
+        -webkit-transition:all 0.5s ease-in-out;
+        -moz-transition:all 0.5s ease-in-out;
+        -o-transition:all 0.5s ease-in-out;
+        transition:all 0.5s ease-in-out;
+    }
+
+    #aside a{
+        display:block;
+        color:var(--dark-grey);
+        margin:20px 20px 50px 0;
+        -webkit-transition:all 0.5s ease-in-out;
+        -moz-transition:all 0.5s ease-in-out;
+        -o-transition:all 0.5s ease-in-out;
+        transition:all 0.5s ease-in-out;
+    }
+
+    #aside .closebtn{
+        display:block;
+        position:absolute;
+        top:-10px;
+        left:20px;
+        font-size:30px;
+    }
+
+    #aside .closebtn:hover{
+        text-decoration:none;
+    }
+
+    #aside label{
+        display:block;
+    }
+
+    #rest{
         display:none;
     }
 
     #results{
         margin-top:-25px;
+    }
+
+    #copy{
+        display:none;
     }
 
     .container-fluid{

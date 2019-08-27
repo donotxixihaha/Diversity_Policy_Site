@@ -426,3 +426,10 @@ $(document).ready(function() {
         }
     }
 });
+
+function openNav() {
+    document.getElementById("aside").style.width = "250px";
+}
+function closeNav() {
+    document.getElementById("aside").style.width = "0";
+}

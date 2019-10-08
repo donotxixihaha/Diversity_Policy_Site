@@ -79,7 +79,7 @@ def autocompleteModel(request):
     data = list(set([n.strip() for n in ast.literal_eval(data)]))[:10]
     print("Text: ", q)
     query_length = len(q)
-    print("Suggestions: ", data)
+    #print("Suggestions: ", data)
 
     # check for 'part' and numbers and maybe skip over ones with commas and limit the length of suggestions
     for i in range(len(data)):

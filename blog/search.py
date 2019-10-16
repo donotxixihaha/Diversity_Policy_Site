@@ -17,7 +17,7 @@ class policies(db.Model):
     __tablename__ = 'policies'
     # can add different variables in __searchable__ parameter for searching
     __searchable__ = ['title','school','abstract']
-
+    # define variable for each policy
     id = db.Column(db.Integer,primary_key=True)
     timestamp = db.Column(db.Text)
     title = db.Column(db.Text)
@@ -62,6 +62,6 @@ def search(query, filter=None):
 
 # Functions similarly to search(), except results are found using prefix, only searching over title field, and object
 # is used differently than the search() object is in the function calling search_suggest()
-
+# After switching to SQL database, they are currently the same
 def search_suggest(query):
     return policies.query.msearch(query)

@@ -247,7 +247,7 @@ function showCites(source) {
 
 function getMLA(source) {
     var mla = "";
-    if(source.getAttribute("data-author")) {
+    if(source.getAttribute("data-author").length > 2 && source.getAttribute("data-author") != "None") {
         mla += (formatAuthor(source.getAttribute("data-author").trim(), "mla"));
     }
     if(source.getAttribute("data-title")) {
@@ -263,7 +263,7 @@ function getMLA(source) {
         var pub = source.getAttribute("data-publisher").trim();
         mla += (pub.italics() + ', ');
     }
-    if(source.getAttribute("data-pubdate")) {
+    if(source.getAttribute("data-pubdate") && source.getAttribute("data-pubdate") != "None") {
         mla += (formatDate(source.getAttribute("data-pubdate").trim(), "mla") + ", ");
     }
     var url = source.getAttribute("data-url");
@@ -282,7 +282,7 @@ function getMLA(source) {
 
 function getAPA(source) {
     var apa = "";
-    if(source.getAttribute("data-author")) {
+    if(source.getAttribute("data-author").length > 2 && source.getAttribute("data-author") != "None") {
         apa += (formatAuthor(source.getAttribute("data-author").trim(), "apa"));
     }
     if(source.getAttribute("data-title")) {
@@ -294,7 +294,7 @@ function getAPA(source) {
             apa += (source.getAttribute("data-title").trim() + '. ');
         }
     }
-    if(source.getAttribute("data-pubdate")) {
+    if(source.getAttribute("data-pubdate") && source.getAttribute("data-pubdate") != "None") {
         apa += ("(" + formatDate(source.getAttribute("data-pubdate").trim(), "apa") + "). ");
     } else {
         apa += "(n.d.). ";
@@ -306,7 +306,7 @@ function getAPA(source) {
 
 function getChicago(source) {
     var chicago = "";
-    if(source.getAttribute("data-author")) {
+    if(source.getAttribute("data-author").length > 2 && source.getAttribute("data-author") != "None") {
         chicago += (formatAuthor(source.getAttribute("data-author").trim(), "chicago"));
     }
     if(source.getAttribute("data-title")) {
@@ -321,7 +321,7 @@ function getChicago(source) {
     if(source.getAttribute("data-publisher")) {
         chicago += (source.getAttribute("data-publisher").trim() + '. ');
     }
-    if(source.getAttribute("data-pubdate")) {
+    if(source.getAttribute("data-pubdate") && source.getAttribute("data-pubdate") != "None") {
         chicago += (formatDate(source.getAttribute("data-pubdate").trim(), "chicago") + '. ');
     } else {
         var date = new Date();

@@ -17,7 +17,7 @@ class policies(db.Model):
     __tablename__ = 'policies'
     # can add different variables in __searchable__ parameter for searching
     __searchable__ = ['title','school','abstract']
-    # define variable for each policy
+
     id = db.Column(db.Integer,primary_key=True)
     timestamp = db.Column(db.Text)
     title = db.Column(db.Text)
@@ -44,8 +44,10 @@ search.init_app(app)
 
 # currently gets 100 results--will need to figure out a way to get best number of potentially useful results
 def search(query, filter=None):
+    results = policies.query.msearch(query)
+    db.session.remove()
     if(filter==None or len(filter)==0):
-        return policies.query.msearch(query)
+        return results
     dates = set()
     schools = set()
     for f in filter:
@@ -54,14 +56,16 @@ def search(query, filter=None):
         else:
             schools.add(f)
     if(dates==None or len(dates)==0):
-        return policies.query.msearch(query).filter(policies.school.in_(schools))
+        return results.filter(policies.school.in_(schools))
     elif(schools==None or len(schools)==0):
-        return policies.query.msearch(query).filter(policies.published_date.in_(dates))
+        return results.filter(policies.published_date.in_(dates))
     else:
-        return policies.query.msearch(query).filter((policies.school.in_(schools)&policies.published_date.in_(dates)))
+        return results.filter((policies.school.in_(schools)&policies.published_date.in_(dates)))
 
 # Functions similarly to search(), except results are found using prefix, only searching over title field, and object
 # is used differently than the search() object is in the function calling search_suggest()
-# After switching to SQL database, they are currently the same
+
 def search_suggest(query):
-    return policies.query.msearch(query)
+    results = policies.query.msearch(query)
+    db.session.remove()
+    return results

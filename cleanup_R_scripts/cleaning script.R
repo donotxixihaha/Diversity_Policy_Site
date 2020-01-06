@@ -76,7 +76,7 @@ data <-
   mutate(city = replace(city, state == 'claremont', 'claremont')) %>% 
   mutate(city = replace(city, state == '30.6919', 'Mobile')) %>% 
   mutate(city = replace(city, state == 'columbia', 'columbia')) %>% 
-  mutate(city = replace(city, state == 'milwaukee', 'milwaukee')) %>% 
+  mutate(city = replace(city, is.element(city, c('milwaukee', 'research misconduct', 'miwaukee')) , 'milwaukee')) %>% 
   mutate(city = replace(city, state == 'madison', 'madison')) %>% 
   mutate(city = replace(city, is.element(state, c('church', 'presbyterian')), 'point lookout')) %>% 
   mutate(city = replace(city, state == 'norman', 'norman')) %>% 
@@ -136,7 +136,7 @@ errors <-
 
  data <-
    data %>% 
-   #fixing school names
+   #fixing school names on the rows of cities
    mutate(school = replace(school, city == 'colgate', 'colgate univeristy')) %>%  
    mutate(school = replace(school, city == 'villanova', 'villanova univeristy')) %>%  
    mutate(school = replace(school, str_detect(school, 'university of hawai'), 'university of hawaii')) %>%
@@ -154,10 +154,54 @@ errors <-
    mutate(city = replace(city, is.element(city, c('tuscan', 'tuscon')), 'tucson')) %>%   
    mutate(city = replace(city, city == 'lexington city', 'lexington')) %>% 
    mutate(city = replace(city, city == 'haverford college', 'haverford')) %>% 
+   mutate(city = replace(city, is.element(city, c('university of michigan- dearborn', 'dearnborn')), 'dearborn')) %>% 
+   mutate(city = replace(city, city == 'amherst college', 'amherst')) %>% 
+   mutate(city = replace(city, city == 'orone', 'orono')) %>% 
+   mutate(city = replace(city, city == 'wellesley college', 'wellesley')) %>%
+   mutate(city = replace(city, city == 'pheonix', 'phoenix')) %>%
+   mutate(city = replace(city, is.element(city, c('immaculata', 'imaculata')), 'malvern')) %>%
+   mutate(city = replace(city, is.element(city, c('fayeteville' , 'fayettevile', 'fayetteville,', 'fayettevill', 'fayettville')), 'fayetteville')) %>%
+   mutate(city = replace(city, city == 'san jose state university', 'san jose')) %>%
+   mutate(city = replace(city, city == 'saint louis university', 'saint louis')) %>%
+   mutate(city = replace(city, is.element(city, c('pittsbrugh','pitttsburgh')), 'pittsburgh')) %>%
+   mutate(city = replace(city, city == 'pennsylvania', 'philadelphia')) %>%
+   mutate(city = replace(city, is.element(city, c('johns hopkins university', 'balitmore')), 'baltimore')) %>%
+   mutate(city = replace(city, is.element(city, c('burlingto', 'burlintgon')), 'burlington')) %>%
+   mutate(city = replace(city, is.element(city, c('aurburn', 'aubrun')), 'auburn')) %>%
+   mutate(city = replace(city, city == 'alanta', 'atlanta')) %>%
+   mutate(city = replace(city, city == 'worchester', 'worcester')) %>%
+   mutate(city = replace(city, city == 'we', 'wellesley')) %>%
+   mutate(city = replace(city, is.element(city, c('university of idaho', 'mosco')), 'moscow')) %>%
+   mutate(city = replace(city, city == 'tuscaloos', 'tuscaloosa')) %>%
+   mutate(city = replace(city, city == 'standford', 'stanford')) %>%
+   mutate(city = replace(city, city == 'san francicso', 'san francisco')) %>%
+   mutate(city = replace(city, city == 'san deigo', 'san diego')) %>%
+   mutate(city = replace(city, is.element(city, c('salt llake city', 'salt lake')), 'san diego')) %>%
+   mutate(city = replace(city, city == 'san deigo', 'san diego')) %>%
+   mutate(city = replace(city, city == 'oxofrd', 'oxford')) %>%
+   mutate(city = replace(city, city == 'new bruswick', 'new brunswick')) %>% 
+   mutate(city = replace(city, is.element(city, c('biola university','brandeis','mirada')), 'la mirada')) %>% 
+   mutate(city = replace(city, city == 'la miranda', 'la mirada')) %>% 
+   mutate(city = replace(city, city == 'iowa state', 'iowa city')) %>% 
+   mutate(city = replace(city, city == 'illinois', 'chicago')) %>% 
+   mutate(city = replace(city, is.element(city, c('houghotn', 'houhgton')), 'chicago')) %>% 
+   mutate(city = replace(city, city == 'harrisonbug', 'harrisonburg')) %>% 
+   mutate(city = replace(city, city == 'eugenw', 'eugene')) %>% 
+   mutate(city = replace(city, is.element(city, c('east lansng', 'east lanisng')), 'east lansing')) %>% 
+   mutate(city = replace(city, city == 'dalas', 'dallas')) %>% 
+   mutate(city = replace(city, city == 'corvallisv', 'corvallis')) %>% 
+   mutate(city = replace(city, city == 'college station3', 'college station')) %>% 
+   mutate(city = replace(city, city == 'college paek', 'college park')) %>%  
+   mutate(city = replace(city, city == 'claremonth', 'claremont')) %>%  
+   mutate(city = replace(city, city == 'cincinati', 'cincinnati')) %>%  
+   mutate(city = replace(city, city == 'brandeis', 'Waltham')) %>% 
+   mutate(city = replace(city, city == 'alaska', 'anchorage')) %>% 
    
+   #arbitray placement of university of illinois in urbana
+   mutate(city = replace(city, is.element(city, c('urbana champaign', 'urbana-champaign')), 'urbana')) %>%
    #arbitrary placement of tufts university in medford
    mutate(city = replace(city, school == 'tufts university', 'medford')) 
-   #mutate(city = replace(city, city == 'villanova', 'Radnor Township')) %>% 
+
 
 write.csv(data, file = 'updated_db.csv', fileEncoding ="UTF-8")
 

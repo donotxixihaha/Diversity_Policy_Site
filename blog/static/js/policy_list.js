@@ -84,7 +84,7 @@ $(document).ready(function() {
     $('.filter').each(function(){
         $(this).wrap("<label></label>");
         if(this.getAttribute("data-school") != null){
-            $(this).val(this.getAttribute("data-school").toTitleCase());
+            $(this).val(this.getAttribute("data-school").toLowerCase());
         }
     });
 
@@ -94,7 +94,7 @@ $(document).ready(function() {
     });
 
     $('.dropdown-two label').each(function(){
-        var school = $(this).find("input").val();
+        var school = $(this).find("input").val().toTitleCase();
         this.innerHTML += "<span> " + school + "</span>";
     });
 
@@ -104,7 +104,7 @@ $(document).ready(function() {
     $( ".filter" ).on( "click", function( event ) {
         var str = "&filter=" + this.getAttribute("data-year");
         if(this.getAttribute("data-school") != null) {
-            var school = encodeURIComponent(this.getAttribute("data-school").toTitleCase().trim());
+            var school = encodeURIComponent(this.getAttribute("data-school").toLowerCase().trim());
             var str2 = "&filter=" + school;
         }
         if($(this).prop("checked") == false) {

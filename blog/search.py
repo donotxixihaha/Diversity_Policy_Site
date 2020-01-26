@@ -8,7 +8,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://fcjcveutbexema:efa00a6e181ba
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['WHOOSH_BASE'] = 'whoosh'
 app.config['DEBUG'] = True
-
+app.config['SQLALCHEMY_POOL_SIZE'] = 15
 db = SQLAlchemy(app)
 
 class policies(db.Model):

@@ -2,6 +2,8 @@ from flask import Flask
 from flask_msearch import Search
 from flask_sqlalchemy import SQLAlchemy
 
+import datetime
+
 # setting of postgreSQL database
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://fcjcveutbexema:efa00a6e181ba6f2a6c5af034a7e81a5b099d7c7340812e96719c8c22cd15390@ec2-54-83-55-125.compute-1.amazonaws.com:5432/df9hbd55p7h8d7'
@@ -48,19 +50,21 @@ def search(query, filter=None):
     db.session.remove()
     if(filter==None or len(filter)==0):
         return results
-    dates = set()
-    schools = set()
+    years = []
+    schools = []
     for f in filter:
         if(f[0].isdigit()):
-            dates.add(f)
+            years.append(f)
         else:
-            schools.add(f)
-    if(dates==None or len(dates)==0):
+            schools.append(f)
+    if(years==None or len(years)==0):
         return results.filter(policies.school.in_(schools))
     elif(schools==None or len(schools)==0):
-        return results.filter(policies.published_date.in_(dates))
+        temp1 = '1/1/' + years[0]
+        temp2 = '12/31/' + years[0]
+        return results.filter(policies.published_date.between(temp1, temp2))
     else:
-        return results.filter((policies.school.in_(schools)&policies.published_date.in_(dates)))
+        return results.filter((policies.school.in_(schools)&policies.published_date.in_(years)))
 
 # Functions similarly to search(), except results are found using prefix, only searching over title field, and object
 # is used differently than the search() object is in the function calling search_suggest()

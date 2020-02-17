@@ -3,6 +3,7 @@ from flask_msearch import Search
 from flask_sqlalchemy import SQLAlchemy
 
 import datetime
+from sqlalchemy import extract
 
 # setting of postgreSQL database
 app = Flask(__name__)
@@ -32,7 +33,7 @@ class policies(db.Model):
     latitude = db.Column(db.Text)
     longitude = db.Column(db.Text)
     link = db.Column(db.Text)
-    published_date = db.Column(db.String)
+    published_date = db.Column(db.Date)
     tags = db.Column(db.Text)
     abstract = db.Column(db.Text)
     text = db.Column(db.Text)
@@ -60,11 +61,10 @@ def search(query, filter=None):
     if(years==None or len(years)==0):
         return results.filter(policies.school.in_(schools))
     elif(schools==None or len(schools)==0):
-        temp1 = '1/1/' + years[0]
-        temp2 = '12/31/' + years[0]
-        return results.filter(policies.published_date.between(temp1, temp2))
+        results = results.filter(extract('year', policies.published_date).in_(years))
+        return results
     else:
-        return results.filter((policies.school.in_(schools)&policies.published_date.in_(years)))
+        return results.filter((policies.school.in_(schools)&extract('year', policies.published_date).in_(years)))
 
 # Functions similarly to search(), except results are found using prefix, only searching over title field, and object
 # is used differently than the search() object is in the function calling search_suggest()

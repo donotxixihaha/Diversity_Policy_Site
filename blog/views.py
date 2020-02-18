@@ -40,7 +40,7 @@ def policy_search(request):
     term = request.GET.get('search')
     fil = request.GET.getlist('filter')
     policies = search(term, fil)
-    all = search(term)
+    unfiltered = search(term)
 
     paginator = Paginator(policies, 10)
 
@@ -53,7 +53,7 @@ def policy_search(request):
     except EmptyPage:
         policies = paginator.get_page(paginator.num_pages)
 
-    return render(request, 'blog/policy_list.html', {'policies': policies, 'all': all, 'max_pages': paginator.num_pages})
+    return render(request, 'blog/policy_list.html', {'policies': policies, 'all': unfiltered, 'max_pages': paginator.num_pages})
 
 # class FacetedSearchView(BaseFacetedSearchView):
 #     form_class = FacetedPolicySearchForm

@@ -21,9 +21,9 @@ $(document).ready(function() {
     });
 
     var timeoutID = null;
-    function findMember(str) {
-        console.log('search: ' + str);
-    }
+    // function findMember(str) {
+    //     console.log('search: ' + str);
+    // }
 
 
     // Search bar autocomplete suggestions
@@ -37,7 +37,7 @@ $(document).ready(function() {
             success: function(res) {
                 //console.log(res);
                 var tags = res.suggestions;
-                console.log(tags);
+                // console.log(tags);
                 $( "#s_bar2" ).autocomplete({
                     source: tags
                 });
@@ -60,7 +60,7 @@ $(document).ready(function() {
     var schools = [];
     $('.filter').each(function(){
         if(this.getAttribute("data-year") != null){
-            var year = this.getAttribute("data-year").split("/");
+            var year = this.getAttribute("data-year").split(" ");
             key = year[2];
             this.setAttribute('data-year', key)
              if(!years.includes(key)){
@@ -141,9 +141,9 @@ $(document).ready(function() {
 var yearFilter = document.querySelectorAll("[data-year]");
 var yearFilterArray = Array.from(yearFilter);
 let sorted = yearFilterArray.sort(sorter);
-console.log(sorted)
+// console.log(sorted)
 function sorter(a,b) {
-    if(a.dataset.year.split("/")[2] < b.dataset.year.split("/")[2] ) {
+    if(a.dataset.year.split(" ")[2] < b.dataset.year.split(" ")[2] ) {
         return -1;
     }
     if(a.dataset.year > b.dataset.year) {

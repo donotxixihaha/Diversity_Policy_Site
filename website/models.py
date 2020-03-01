@@ -33,7 +33,7 @@ class Policy(models.Model):
     latitude = models.CharField(max_length=255)
     longitude = models.CharField(max_length=255)
     link = models.TextField(blank=True)
-    published_date = models.DateField(blank=True, null=True)
+    published_date = models.DateField(blank=True, null=True, default=None)
     tags = models.CharField(choices=POSSIBLE_TAGS, max_length=255)
     abstract = models.TextField(blank=True)
     text = models.TextField(blank=True)

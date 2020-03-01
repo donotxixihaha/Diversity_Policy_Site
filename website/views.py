@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from .models import Policy
 from .search import search, search_suggest
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db import connection
 
 import json
 import ast
@@ -36,9 +37,62 @@ def about_page(request):
 def contribute_policy(request):
     return render(request, 'website/contribute_policy.html')
 
+def build_local_table():
+    STMT = "SELECT title,\
+                   school,\
+                   department,\
+                   administrator,\
+                   author,\
+                   state,\
+                   city,\
+                   latitude,\
+                   longitude,\
+                   link,\
+                   (CASE \
+                         WHEN published_date < '1000-01-01' THEN NULL \
+                         ELSE published_date \
+                    END) AS published_date,\
+                   tags,\
+                   abstract,\
+                   text \
+            FROM policies"
+    print("START")
+    with connection.cursor() as cursor:
+        cursor.execute(STMT)
+        rows = cursor.fetchall()
+        for row in rows:
+            item = Policy(
+                title = row[0],
+                school = row[1],
+                department = str(row[2] or ''),
+                administrator = str(row[3] or ''),
+                author = str(row[4] or ''),
+                state = row[5],
+                city = row[6],
+                latitude = row[7],
+                longitude = row[8],
+                link = row[9],
+                published_date = row[10],
+                tags = str(row[11] or ''),
+                abstract = str(row[12] or ''),
+                text = str(row[13] or '')
+            )
+            item.save()
+    print("END")
+
 def policy_search(request):
+
+    # if the table is empty, insert data from remote db
+    items = Policy.objects.all()
+    if len(items) == 0:
+        build_local_table()
+
+
+    table_name = 'policies'
+    search_lst = ['title','school','abstract']
     term = request.GET.get('search')
     fil = request.GET.getlist('filter')
+
     policies = search(term, fil)
     unfiltered = search(term)
 

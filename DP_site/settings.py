@@ -100,16 +100,25 @@ DATABASES = {
     #    'PORT': '5432'
     # }
 
+    'default': {
+       'ENGINE': 'django.db.backends.postgresql',
+       'NAME': 'df9hbd55p7h8d7',
+       'USER': 'fcjcveutbexema',
+       'PASSWORD': 'efa00a6e181ba6f2a6c5af034a7e81a5b099d7c7340812e96719c8c22cd15390',
+       'HOST': 'ec2-54-83-55-125.compute-1.amazonaws.com',
+       'PORT': '5432'
+    }
+
     #
     # 'default': dj_database_url.config(
     #     default=config('DATABASE_URL')
     # )
     #
 
-    'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'mydatabase',
-        }
+    # 'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': 'mydatabase',
+    #     }
 
 
 }

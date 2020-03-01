@@ -1,70 +1,86 @@
-from flask import Flask
-from flask_msearch import Search
-from flask_sqlalchemy import SQLAlchemy
-
-import datetime
-from sqlalchemy import extract
-
-# setting of postgreSQL database
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://fcjcveutbexema:efa00a6e181ba6f2a6c5af034a7e81a5b099d7c7340812e96719c8c22cd15390@ec2-54-83-55-125.compute-1.amazonaws.com:5432/df9hbd55p7h8d7'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['WHOOSH_BASE'] = 'whoosh'
-app.config['DEBUG'] = True
-app.config['SQLALCHEMY_POOL_SIZE'] = 15
-db = SQLAlchemy(app)
-
-class policies(db.Model):
-
-    # connect to the postgreSQL database table
-    __tablename__ = 'policies'
-    # can add different variables in __searchable__ parameter for searching
-    __searchable__ = ['title','school','abstract']
-
-    id = db.Column(db.Integer,primary_key=True)
-    timestamp = db.Column(db.Text)
-    title = db.Column(db.Text)
-    school = db.Column(db.Text)
-    department = db.Column(db.Text)
-    administrator = db.Column(db.Text)
-    author = db.Column(db.Text)
-    state = db.Column(db.Text)
-    city = db.Column(db.Text)
-    latitude = db.Column(db.Text)
-    longitude = db.Column(db.Text)
-    link = db.Column(db.Text)
-    published_date = db.Column(db.Date)
-    tags = db.Column(db.Text)
-    abstract = db.Column(db.Text)
-    text = db.Column(db.Text)
-
-    def __repr__(self):
-        return '<Post:{}>'.format(self.title)
-
-# using search package function of msearch
-search = Search()
-search.init_app(app)
+from django.db import connection
+from .models import Policy
 
 # currently gets 100 results--will need to figure out a way to get best number of potentially useful results
 def search(query, filter=None):
-    results = policies.query.msearch(query)
-    db.session.remove()
-    if(filter==None or len(filter)==0):
-        return results
-    years = []
-    schools = []
-    for f in filter:
-        if(f[0].isdigit()):
-            years.append(f)
-        else:
-            schools.append(f)
-    if(years==None or len(years)==0):
-        return results.filter(policies.school.in_(schools))
-    elif(schools==None or len(schools)==0):
-        results = results.filter(extract('year', policies.published_date).in_(years))
-        return results
-    else:
-        return results.filter((policies.school.in_(schools)&extract('year', policies.published_date).in_(years)))
+
+
+    STMT_FILTER = ''
+    if filter:
+        first_flag = True
+        for i in filter:
+            if first_flag:
+                first_flag = False
+            else:
+                STMT_FILTER += " OR "
+
+            if i.isnumeric():
+                start_of_yr = i + "-01-01"
+                end_of_yr = i + "-12-31"
+                STMT_FILTER += "published_date <= \'" + end_of_yr + "\' AND " + \
+                               "published_date >= \'" + start_of_yr + "\'"
+            else:
+                STMT_FILTER += "school = \'" + i + "\'"
+        STMT_FILTER += " AND "
+ 
+
+    STMT = "SELECT title, school, department, administrator, author, " + \
+                  "state, city, latitude, longitude, link, " + \
+                  "(CASE WHEN published_date < '1000-01-01' THEN NULL " + \
+                        "ELSE published_date " + \
+                   "END) AS published_date, " + \
+                  "tags, abstract, text " + \
+           "FROM policies " + \
+           "WHERE " + STMT_FILTER + \
+                  "title LIKE \'%" + query + "%\' OR " + \
+                  "abstract LIKE \'%" + query + "%\';"
+
+    # print(STMT)
+    print("START Fetching...")
+    result = []
+    with connection.cursor() as cursor:
+        cursor.execute(STMT)
+        rows = cursor.fetchall()
+        for row in rows:
+            item = Policy(
+                title = row[0],
+                school = row[1],
+                department = str(row[2] or ''),
+                administrator = str(row[3] or ''),
+                author = str(row[4] or ''),
+                state = row[5],
+                city = row[6],
+                latitude = row[7],
+                longitude = row[8],
+                link = row[9],
+                published_date = row[10],
+                tags = str(row[11] or ''),
+                abstract = str(row[12] or ''),
+                text = str(row[13] or '')
+            )
+            result.append(item)
+    print("END Fetching.")
+    print("length of result:", len(result))
+    return result
+
+    # results = policies.query.msearch(query)
+    # db.session.remove()
+    # if(filter==None or len(filter)==0):
+    #     return results
+    # years = []
+    # schools = []
+    # for f in filter:
+    #     if(f[0].isdigit()):
+    #         years.append(f)
+    #     else:
+    #         schools.append(f)
+    # if(years==None or len(years)==0):
+    #     return results.filter(policies.school.in_(schools))
+    # elif(schools==None or len(schools)==0):
+    #     results = results.filter(extract('year', policies.published_date).in_(years))
+    #     return results
+    # else:
+    #     return results.filter((policies.school.in_(schools)&extract('year', policies.published_date).in_(years)))
 
 # Functions similarly to search(), except results are found using prefix, only searching over title field, and object
 # is used differently than the search() object is in the function calling search_suggest()

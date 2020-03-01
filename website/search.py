@@ -1,9 +1,14 @@
 from django.db import connection
 from .models import Policy
 
-# currently gets 100 results--will need to figure out a way to get best number of potentially useful results
-def search(query, filter=None):
 
+# Search the policies in the database with the matching requirements.
+#
+# @param query - search term expression
+# @param filter - filter term list
+# @return result - a list of policy objects matched with the given query and filter
+#
+def search(query, filter=None):
 
     STMT_FILTER = ''
 
@@ -97,10 +102,10 @@ def search(query, filter=None):
     
     include_term = set(query.strip(" ").split(" "))
 
-    print("seq    :", seq_term)
-    print("exact  :", list(exact_term))
-    print("include:", list(include_term))
-    print("exclude:", list(exclude_term))
+    # print("seq    :", seq_term)
+    # print("exact  :", list(exact_term))
+    # print("include:", list(include_term))
+    # print("exclude:", list(exclude_term))
  
 
     STMT_TERM = ""

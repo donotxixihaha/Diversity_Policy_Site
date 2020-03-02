@@ -221,10 +221,10 @@ def search(query, filter=None):
         include_term = set(query.split(" "))
         
 
-    print("seq    :", seq_term)
-    print("exact  :", list(exact_term))
-    print("include:", list(include_term))
-    print("exclude:", list(exclude_term))
+    # print("seq    :", seq_term)
+    # print("exact  :", list(exact_term))
+    # print("include:", list(include_term))
+    # print("exclude:", list(exclude_term))
     
     if include_term:
         exact_term = exact_term.union(include_term)
@@ -243,7 +243,7 @@ def search(query, filter=None):
            "FROM policies " + \
            "WHERE " + STMT_FILTER + STMT_TERM + ";"
 
-    print(STMT)
+    # print(STMT)
     print("START Fetching...")
     result = []
     with connection.cursor() as cursor:

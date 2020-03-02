@@ -100,6 +100,8 @@ def search(query, filter=None):
                 i = start_idx - 1
             i += 1
     
+    for i in SPLITTER:
+        query = query.replace(i, "")
     include_term = set(query.strip(" ").split(" "))
 
     # print("seq    :", seq_term)

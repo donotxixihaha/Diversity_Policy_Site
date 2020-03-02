@@ -2,6 +2,119 @@ from django.db import connection
 from .models import Policy
 
 
+# Return a sql statement to find records with pattern of a sequence of words,
+# if the given sequence term list is non-empty, otherwise return an empty string.
+#
+# @param field - a string of field name
+# @param seq_term - a list of a sequence of words
+# @return seq_pattern - a string of sql statement
+#
+# sql statement format: 
+# field LIKE '%seq_term[0]%seq_term[1]%seq_term[2]%...%seq_term[end]%'
+#
+def get_seq_stmt(field, seq_term):
+
+    if seq_term:
+        seq_pattern = field + " LIKE \'%"
+        for i in seq_term:
+            seq_pattern += i + "%"
+        seq_pattern += "\'"
+        return "(" + seq_pattern + ")"
+    else:
+        return ""
+
+
+# Return a sql statement to find records with exact match of 
+# a list of phrases and words,
+# if the given exact term set or include term list is non-empty, 
+# otherwise return an empty string.
+#
+# @param field - a string of field name
+# @param exact_term - a list of phrases or words to exact match
+# @return exact_pattern - a string of sql statement
+#
+# sql statement format: 
+# field LIKE '%exact_term[0]%' OR 
+# field LIKE '%exact_term[1]%' OR ... OR 
+# field LIKE '%exact_term[end]%'
+#
+def get_exact_stmt(field, exact_term):
+
+    if exact_term:
+        exact_pattern = ""
+        for i in range(len(exact_term)):
+            exact_pattern += field + " LIKE \'%" + exact_term[i] + "%\'"
+            if i < len(exact_term) - 1:  # not the last one
+                exact_pattern += " OR "
+        return "(" + exact_pattern + ")"
+    else:
+        return ""
+
+
+# Return a sql statement to find records without a list of words,
+# if the given exclude term list is non-empty, 
+# otherwise return an empty string.
+#
+# @param field - a string of field name
+# @param exclude - a list of words to exclusive match
+# @return exclude_pattern - a string of sql statement
+#
+# sql statement format: 
+# field NOT LIKE '%exclude_term[0]%' AND 
+# field NOT LIKE '%exclude_term[1]%' AND ... AND 
+# field NOT LIKE '%exclude_term[end]%'
+#
+def get_exclude_stmt(field, exclude_term):
+    
+    if exclude_term:
+        exclude_pattern = ""
+        for i in range(len(exclude_term)):
+            exclude_pattern += field + " NOT LIKE \'%" + exclude_term[i] + "%\'"
+            if i < len(exclude_term) - 1:  # not the last one
+                exclude_pattern += " AND "
+        return "(" + exclude_pattern + ")"
+    else:
+        return ""
+
+
+# Return sql statement of searching terms, with the given type and terms search,
+# if the given type is valid,
+# otherwise return an empty string
+#
+# @param stmt_term - a sql statement string
+# @param type_name - a string represents search type
+# @param terms - a list of terms to search
+# @return stmt_term - a sql statement
+#
+def get_stmt_term(stmt_term, type_name, terms):
+    FIELDS = ('title', 'school', 'department', 'administrator', 'author',
+              'state', 'city', 'latitude', 'longitude', 'link', 
+              'tags', 'abstract', 'text')
+    TYPES = ('seq', 'exact', 'exclude')
+
+    if type_name not in TYPES:
+        return ""
+
+    for field in FIELDS:
+        if type_name == TYPES[0]:
+            seq_term = terms
+            cur_stmt = get_seq_stmt(field, seq_term)
+        elif type_name == TYPES[1]:
+            exact_term = terms
+            cur_stmt = get_exact_stmt(field, exact_term)
+        else:  # TYPES[2]
+            exclude_term = terms
+            cur_stmt = get_exclude_stmt(field, exclude_term)
+        if cur_stmt:
+            if stmt_term:  # non-empty stmt, need prepend ADD
+                if type_name == TYPES[2]:
+                    stmt_term += " AND "
+                else:
+                    stmt_term += " OR "
+            stmt_term += cur_stmt
+    return stmt_term
+
+
 # Search the policies in the database with the matching requirements.
 #
 # @param query - search term expression
@@ -9,8 +122,10 @@ from .models import Policy
 # @return result - a list of policy objects matched with the given query and filter
 #
 def search(query, filter=None):
+    
+    SPLITTER = ("\"", "-", "[", "]")
 
-    STMT_FILTER = ''
+    STMT_FILTER = ""
 
     if filter:
         first_flag = True
@@ -28,8 +143,6 @@ def search(query, filter=None):
             else:
                 STMT_FILTER += "school = \'" + i + "\'"
         STMT_FILTER += " AND "
- 
-    SPLITTER = ("\"", "-", "[", "]")
 
     seq_term = []
     exact_term = set()
@@ -102,57 +215,25 @@ def search(query, filter=None):
     
     for i in SPLITTER:
         query = query.replace(i, "")
-    include_term = set(query.strip(" ").split(" "))
+    query = query.strip(" ")
+    include_term = set()
+    if query:
+        include_term = set(query.split(" "))
+        
 
-    # print("seq    :", seq_term)
-    # print("exact  :", list(exact_term))
-    # print("include:", list(include_term))
-    # print("exclude:", list(exclude_term))
- 
+    print("seq    :", seq_term)
+    print("exact  :", list(exact_term))
+    print("include:", list(include_term))
+    print("exclude:", list(exclude_term))
+    
+    if include_term:
+        exact_term = exact_term.union(include_term)
 
     STMT_TERM = ""
-
-    # abstract LIKE '%seq_term[0]%seq_term[1]%seq_term[2]%...%seq_term[end]%'
-    if seq_term:
-        seq_pattern = "abstract LIKE \'%"
-        for i in seq_term:
-            seq_pattern += "" + i + "%"
-        seq_pattern += "\'"
-        STMT_TERM += "(" + seq_pattern + ")"
-
-    # abstract LIKE '%exact_term[0]%' OR 
-    # abstract LIKE '%exact_term[1]%' OR ...  OR 
-    # abstract LIKE '%exact_term[end]%'
-    exact_term = exact_term.union(include_term)
-    if exact_term:
-        exact_pattern = "abstract LIKE \'%"
-        for i in exact_term:
-            exact_pattern += i + "%\' OR abstract LIKE \'%"
-        exact_pattern = exact_pattern.rstrip("\' OR abstract LIKE \'%")
-        exact_pattern += "\'"
-        if seq_term:
-            STMT_TERM += " AND "
-        STMT_TERM += "(" + exact_pattern + ")"
-
-    # abstract NOT LIKE '%exclude_term[0]%' AND 
-    # abstract NOT LIKE '%exclude_term[1]%' AND ...  AND 
-    # abstract NOT LIKE '%exclude_term[end]%'
-    if exclude_term:
-        print("hhhh", exclude_term)
-        exclude_pattern = "abstract NOT LIKE \'%"
-        for i in exclude_term:
-            exclude_pattern += i + "%\' AND abstract NOT LIKE \'%"
-        print("before:", exclude_pattern)
-        exclude_pattern = exclude_pattern.rstrip(" abstract NOT LIKE \'%")
-        exclude_pattern = exclude_pattern.rstrip("\' AND")
-        print("after :", exclude_pattern)
-        exclude_pattern += "\'"
-        if exact_term:
-            STMT_TERM += " AND "
-        STMT_TERM += "(" + exclude_pattern + ")"
+    STMT_TERM = get_stmt_term(STMT_TERM, "seq", seq_term)
+    STMT_TERM = get_stmt_term(STMT_TERM, "exact", list(exact_term))
+    STMT_TERM = get_stmt_term(STMT_TERM, "exclude", list(exclude_term))
   
-    
-
     STMT = "SELECT title, school, department, administrator, author, " + \
                   "state, city, latitude, longitude, link, " + \
                   "(CASE WHEN published_date < '1000-01-01' THEN NULL " + \

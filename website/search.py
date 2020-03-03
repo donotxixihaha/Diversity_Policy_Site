@@ -138,8 +138,8 @@ def search(query, filter=None):
             if i.isnumeric():
                 start_of_yr = i + "-01-01"
                 end_of_yr = i + "-12-31"
-                STMT_FILTER += "published_date <= \'" + end_of_yr + "\' AND " + \
-                               "published_date >= \'" + start_of_yr + "\'"
+                STMT_FILTER += "(published_date <= \'" + end_of_yr + "\' AND " + \
+                               "published_date >= \'" + start_of_yr + "\')"
             else:
                 STMT_FILTER += "school = \'" + i + "\'"
         STMT_FILTER += " AND "
@@ -241,9 +241,9 @@ def search(query, filter=None):
                    "END) AS published_date, " + \
                   "tags, abstract, text " + \
            "FROM policies " + \
-           "WHERE " + STMT_FILTER + STMT_TERM + ";"
+           "WHERE " + STMT_FILTER + "(" + STMT_TERM + ");"
 
-    # print(STMT)
+    print(STMT)
     print("START Fetching...")
     result = []
     with connection.cursor() as cursor:

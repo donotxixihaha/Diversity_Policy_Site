@@ -88,11 +88,12 @@ def policy_search(request):
         build_local_table()
 
 
-    table_name = 'policies'
-    search_lst = ['title','school','abstract']
+    # table_name = 'policies'
+    # term_search_lst = ['title','school','abstract']
     term = request.GET.get('search')
     fil = request.GET.getlist('filter')
 
+    # print(term, fil)
     policies = search(term, fil)
     unfiltered = search(term)
 

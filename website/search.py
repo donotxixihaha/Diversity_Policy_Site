@@ -243,7 +243,7 @@ def search(query, filter=None):
            "FROM policies " + \
            "WHERE " + STMT_FILTER + "(" + STMT_TERM + ");"
 
-    print(STMT)
+    # print(STMT)
     print("START Fetching...")
     result = []
     with connection.cursor() as cursor:

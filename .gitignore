@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 .idea
 .DS_Store
 *.pyc
 mydatabase
+=======
+__pycache__/
+ *.pyc
+ .vscode
+ .idea
+.DS_Store
+>>>>>>> 4438abe36dede74102966e5a3ad5d8f7186c7d3d

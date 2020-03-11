@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+    $("#loader").hide();
+
     // Year filter dropdown
     $(".panel").click(function(){
         var icon = document.querySelector(".icon");
@@ -108,17 +110,23 @@ $(document).ready(function() {
             var str2 = "&filter=" + school;
         }
         if($(this).prop("checked") == false) {
+            $("#loader").show();
             filter_url = filter_url.replace(str, "");
             filter_url = filter_url.replace(str2, "");
             window.history.pushState({}, null, filter_url);
-            $("#results").load(filter_url + " #results");
-            $(window).scrollTop(0);
+            $("#results").load(filter_url + " #results", function(){
+                $("#loader").hide();
+                $(window).scrollTop(0);
+            });
         }
         else {
+            $("#loader").show();
             filter_url += ("&" + $(this).serialize());
             window.history.pushState({}, null, filter_url);
-            $("#results").load(filter_url + " #results");
-            $(window).scrollTop(0);
+            $("#results").load(filter_url + " #results", function(){
+                $("#loader").hide();
+                $(window).scrollTop(0);
+            });
         }
     });
 
@@ -129,10 +137,13 @@ $(document).ready(function() {
 
     // Scroll to top of results after navigating to a new page
     $(document).on("click", ".pagination a", function( event ) {
+        $("#loader").show();
         event.preventDefault();
         window.history.pushState({}, null, this.href);
-        $("#results").load(this.href + " #results");
-        $(window).scrollTop(0);
+        $("#results").load(this.href + " #results", function(){
+            $("#loader").hide();
+            $(window).scrollTop(0);
+        });
     });
 
 });

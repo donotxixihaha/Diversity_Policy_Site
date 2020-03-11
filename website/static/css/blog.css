@@ -509,7 +509,6 @@ footer a:hover{
     }
 }
 
-
 @media(max-width:350px){
     .card h2{
         font-size:1.75rem;
@@ -518,4 +517,35 @@ footer a:hover{
     .card h3{
         font-size:1.25rem;
     }
+}
+
+#loader{
+    display:none;
+}
+
+#loader-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    opacity:0.6;
+    z-index:99999;
+} 
+
+#loader-box{
+    position:fixed;
+    background:#fff;
+    padding:50px 20px;
+    text-align:center;
+    border-radius:0.15rem;
+    top:25%;
+    left:50%;
+    transform:translate(-50%); 
+    z-index:99999;
+}
+
+#loader-box p{
+    margin-bottom:0!important;
 }

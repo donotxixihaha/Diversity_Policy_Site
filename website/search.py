@@ -1,75 +1,300 @@
-from flask import Flask
-from flask_msearch import Search
-from flask_sqlalchemy import SQLAlchemy
+from django.db import connection
+from .models import Policy
 
-import datetime
-from sqlalchemy import extract
 
-# setting of postgreSQL database
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://fcjcveutbexema:efa00a6e181ba6f2a6c5af034a7e81a5b099d7c7340812e96719c8c22cd15390@ec2-54-83-55-125.compute-1.amazonaws.com:5432/df9hbd55p7h8d7'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['WHOOSH_BASE'] = 'whoosh'
-app.config['DEBUG'] = True
-app.config['SQLALCHEMY_POOL_SIZE'] = 15
-db = SQLAlchemy(app)
+# Return a sql statement to find records with pattern of a sequence of words,
+# if the given sequence term list is non-empty, otherwise return an empty string.
+#
+# @param field - a string of field name
+# @param seq_term - a list of a sequence of words
+# @return seq_pattern - a string of sql statement
+#
+# sql statement format: 
+# field LIKE '%seq_term[0]%seq_term[1]%seq_term[2]%...%seq_term[end]%'
+#
+def get_seq_stmt(field, seq_term):
 
-class policies(db.Model):
-
-    # connect to the postgreSQL database table
-    __tablename__ = 'policies'
-    # can add different variables in __searchable__ parameter for searching
-    __searchable__ = ['title','school','abstract']
-
-    id = db.Column(db.Integer,primary_key=True)
-    timestamp = db.Column(db.Text)
-    title = db.Column(db.Text)
-    school = db.Column(db.Text)
-    department = db.Column(db.Text)
-    administrator = db.Column(db.Text)
-    author = db.Column(db.Text)
-    state = db.Column(db.Text)
-    city = db.Column(db.Text)
-    latitude = db.Column(db.Text)
-    longitude = db.Column(db.Text)
-    link = db.Column(db.Text)
-    published_date = db.Column(db.Date)
-    tags = db.Column(db.Text)
-    abstract = db.Column(db.Text)
-    text = db.Column(db.Text)
-
-    def __repr__(self):
-        return '<Post:{}>'.format(self.title)
-
-# using search package function of msearch
-search = Search()
-search.init_app(app)
-
-# currently gets 100 results--will need to figure out a way to get best number of potentially useful results
-def search(query, filter=None):
-    results = policies.query.msearch(query)
-    db.session.remove()
-    if(filter==None or len(filter)==0):
-        return results
-    years = []
-    schools = []
-    for f in filter:
-        if(f[0].isdigit()):
-            years.append(f)
-        else:
-            schools.append(f)
-    if(years==None or len(years)==0):
-        return results.filter(policies.school.in_(schools))
-    elif(schools==None or len(schools)==0):
-        results = results.filter(extract('year', policies.published_date).in_(years))
-        return results
+    if seq_term:
+        seq_pattern = field + " LIKE \'%"
+        for i in seq_term:
+            seq_pattern += i + "%"
+        seq_pattern += "\'"
+        return "(" + seq_pattern + ")"
     else:
-        return results.filter((policies.school.in_(schools)&extract('year', policies.published_date).in_(years)))
+        return ""
+
+
+# Return a sql statement to find records with exact match of 
+# a list of phrases and words,
+# if the given exact term set or include term list is non-empty, 
+# otherwise return an empty string.
+#
+# @param field - a string of field name
+# @param exact_term - a list of phrases or words to exact match
+# @return exact_pattern - a string of sql statement
+#
+# sql statement format: 
+# field LIKE '%exact_term[0]%' OR 
+# field LIKE '%exact_term[1]%' OR ... OR 
+# field LIKE '%exact_term[end]%'
+#
+def get_exact_stmt(field, exact_term):
+
+    if exact_term:
+        exact_pattern = ""
+        for i in range(len(exact_term)):
+            exact_pattern += field + " LIKE \'%" + exact_term[i] + "%\'"
+            if i < len(exact_term) - 1:  # not the last one
+                exact_pattern += " OR "
+        return "(" + exact_pattern + ")"
+    else:
+        return ""
+
+
+# Return a sql statement to find records without a list of words,
+# if the given exclude term list is non-empty, 
+# otherwise return an empty string.
+#
+# @param field - a string of field name
+# @param exclude - a list of words to exclusive match
+# @return exclude_pattern - a string of sql statement
+#
+# sql statement format: 
+# field NOT LIKE '%exclude_term[0]%' AND 
+# field NOT LIKE '%exclude_term[1]%' AND ... AND 
+# field NOT LIKE '%exclude_term[end]%'
+#
+def get_exclude_stmt(field, exclude_term):
+    
+    if exclude_term:
+        exclude_pattern = ""
+        for i in range(len(exclude_term)):
+            exclude_pattern += field + " NOT LIKE \'%" + exclude_term[i] + "%\'"
+            if i < len(exclude_term) - 1:  # not the last one
+                exclude_pattern += " AND "
+        return "(" + exclude_pattern + ")"
+    else:
+        return ""
+
+
+# Return sql statement of searching terms, with the given type and terms search,
+# if the given type is valid,
+# otherwise return an empty string
+#
+# @param stmt_term - a sql statement string
+# @param type_name - a string represents search type
+# @param terms - a list of terms to search
+# @return stmt_term - a sql statement
+#
+def get_stmt_term(stmt_term, type_name, terms):
+    FIELDS = ('title', 'school', 'department', 'administrator', 'author',
+              'state', 'city', 'latitude', 'longitude', 'link', 
+              'tags', 'abstract', 'text')
+    TYPES = ('seq', 'exact', 'exclude')
+
+    if type_name not in TYPES:
+        return ""
+
+    for field in FIELDS:
+        if type_name == TYPES[0]:
+            seq_term = terms
+            cur_stmt = get_seq_stmt(field, seq_term)
+        elif type_name == TYPES[1]:
+            exact_term = terms
+            cur_stmt = get_exact_stmt(field, exact_term)
+        else:  # TYPES[2]
+            exclude_term = terms
+            cur_stmt = get_exclude_stmt(field, exclude_term)
+        if cur_stmt:
+            if stmt_term:  # non-empty stmt, need prepend ADD
+                if type_name == TYPES[2]:
+                    stmt_term += " AND "
+                else:
+                    stmt_term += " OR "
+            stmt_term += cur_stmt
+    return stmt_term
+
+
+# Search the policies in the database with the matching requirements.
+#
+# @param query - search term expression
+# @param filter - filter term list
+# @return result - a list of policy objects matched with the given query and filter
+#
+def search(query, filter=None):
+    
+    SPLITTER = ("\"", "-", "[", "]")
+
+    STMT_FILTER = ""
+
+    if filter:
+        first_flag = True
+        for i in filter:
+            if first_flag:
+                first_flag = False
+            else:
+                STMT_FILTER += " AND "
+
+            if i.isnumeric():
+                start_of_yr = i + "-01-01"
+                end_of_yr = i + "-12-31"
+                STMT_FILTER += "(published_date <= \'" + end_of_yr + "\' AND " + \
+                               "published_date >= \'" + start_of_yr + "\')"
+            else:
+                STMT_FILTER += "school = \'" + i + "\'"
+        STMT_FILTER += " AND "
+
+    print(STMT_FILTER)
+    seq_term = []
+    exact_term = set()
+    exclude_term = set()
+    
+    # exact phrase search, # quotes should be even,
+    # otherwise take it as inclusive pattern
+    if SPLITTER[0] in query and query.count(SPLITTER[0]) % 2 == 0:
+        exact_flag = False
+        start_idx = -1
+        end_idx = -1
+
+        i = 0
+        while i < len(query):
+            if not exact_flag and query[i] == SPLITTER[0]:
+                start_idx = i
+                exact_flag = True   
+            elif exact_flag and query[i] == SPLITTER[0]:
+                end_idx = i
+                exact_term.add(query[start_idx+1:end_idx])
+                exact_flag = False
+                query = query[:start_idx] + " " + query[end_idx+1:]
+                i = start_idx - 1
+            i += 1
+
+    query = query.strip(" ") + " "
+    # print(query)
+
+    # exlusive word search
+    if SPLITTER[1] in query:
+        exclude_flag = False
+        start_idx = -1
+        end_idx = -1
+
+        i = 0
+        while i < len(query):
+            if not exclude_flag and query[i] == SPLITTER[1]:
+                start_idx = i
+                exclude_flag = True        
+            elif exclude_flag and query[i] == ' ':
+                end_idx = i
+                exclude_term.add(query[start_idx+1:end_idx])
+                exclude_flag = False
+                query = query[:start_idx] + " " + query[end_idx+1:]
+                i = start_idx - 1
+            i += 1
+
+    query = query.strip(" ")
+    # print(query)
+
+    # a sequence of words search, square brackets should be paired,
+    # otherwise take it as inclusive pattern
+    if SPLITTER[2] in query and SPLITTER[3] in query:
+        seq_flag = False
+        start_idx = -1
+        end_idx = -1
+
+        i = 0
+        while i < len(query):
+            if query[i] == SPLITTER[2]:
+                start_idx = i
+                seq_flag = True
+            elif query[i] == SPLITTER[3]:
+                end_idx = i
+                seq_term.extend(query[start_idx+1:end_idx].split(" "))
+                seq_flag = False
+                query = query[:start_idx] + " " + query[end_idx+1:]
+                i = start_idx - 1
+            i += 1
+    
+    for i in SPLITTER:
+        query = query.replace(i, "")
+    query = query.strip(" ")
+    include_term = set()
+    if query:
+        include_term = set(query.split(" "))
+        
+
+    # print("seq    :", seq_term)
+    # print("exact  :", list(exact_term))
+    # print("include:", list(include_term))
+    # print("exclude:", list(exclude_term))
+    
+    if include_term:
+        exact_term = exact_term.union(include_term)
+
+    STMT_TERM = ""
+    STMT_TERM = get_stmt_term(STMT_TERM, "seq", seq_term)
+    STMT_TERM = get_stmt_term(STMT_TERM, "exact", list(exact_term))
+    STMT_TERM = get_stmt_term(STMT_TERM, "exclude", list(exclude_term))
+  
+    STMT = "SELECT title, school, department, administrator, author, " + \
+                  "state, city, latitude, longitude, link, " + \
+                  "(CASE WHEN published_date < '1000-01-01' THEN NULL " + \
+                        "ELSE published_date " + \
+                   "END) AS published_date, " + \
+                  "tags, abstract, text " + \
+           "FROM policies " + \
+           "WHERE " + STMT_FILTER + "(" + STMT_TERM + ");"
+
+    # print(STMT)
+    print("START Fetching...")
+    result = []
+    with connection.cursor() as cursor:
+        cursor.execute(STMT)
+        rows = cursor.fetchall()
+        for row in rows:
+            item = Policy(
+                title = row[0],
+                school = row[1],
+                department = str(row[2] or ''),
+                administrator = str(row[3] or ''),
+                author = str(row[4] or ''),
+                state = row[5],
+                city = row[6],
+                latitude = row[7],
+                longitude = row[8],
+                link = row[9],
+                published_date = row[10],
+                tags = str(row[11] or ''),
+                abstract = str(row[12] or ''),
+                text = str(row[13] or '')
+            )
+            result.append(item)
+    print("END Fetching.")
+    print("length of result:", len(result))
+    return result
+
+    # results = policies.query.msearch(query)
+    # db.session.remove()
+    # if(filter==None or len(filter)==0):
+    #     return results
+    # years = []
+    # schools = []
+    # for f in filter:
+    #     if(f[0].isdigit()):
+    #         years.append(f)
+    #     else:
+    #         schools.append(f)
+    # if(years==None or len(years)==0):
+    #     return results.filter(policies.school.in_(schools))
+    # elif(schools==None or len(schools)==0):
+    #     results = results.filter(extract('year', policies.published_date).in_(years))
+    #     return results
+    # else:
+    #     return results.filter((policies.school.in_(schools)&extract('year', policies.published_date).in_(years)))
 
 # Functions similarly to search(), except results are found using prefix, only searching over title field, and object
 # is used differently than the search() object is in the function calling search_suggest()
 
 def search_suggest(query):
-    results = policies.query.msearch(query)
-    db.session.remove()
-    return results
+    # results = policies.query.msearch(query)
+    # db.session.remove()
+    return []

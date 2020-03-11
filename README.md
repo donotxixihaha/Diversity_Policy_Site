@@ -12,6 +12,3 @@ For potential errors:
    ```
    pip3 install package_name
    ```
-
-#### Required package
-Put necessary packages inside requirements.txt.

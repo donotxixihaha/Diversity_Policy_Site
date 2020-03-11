@@ -37,6 +37,7 @@
     </nav>
     <aside id="aside">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <!-- <div class="count">Showing results {{ policies.start_index }}–{{ policies.end_index }} of {{ policies.paginator.count }} </div> -->
         <div id="rsum">
             <h2>Filter by:</h2>
             <label class="panel" for="toggle">Year<div class="icon">+</div></label>
@@ -78,7 +79,7 @@
     <section id="results">
         {% for hit in policies %}
         <article class="card border-0" style="padding: 1px">
-            <div class="card-header"><h2><a href="{{ hit.link }}">{{ hit.title }}</a></h2>
+            <div class="card-header"><h2><a href="{{ hit.link }}" target="_blank">{{ hit.title }}</a></h2>
                 <input id="copy" class="myBtn" id="{{forloop.counter}}-button" type="button" value="Copy Link"
                        data-loading-text="Copied" onclick="CopyToClipboard(this.id, '{{hit.link}}')"/>
                 <!-- Trigger/Open The Modal -->
@@ -129,9 +130,6 @@
         </article>
         {% endfor %}
         <div class="pagination justify-content-center">
-            <!--Maybe make use of later-->
-            <!--<div class="count">Showing {{ policies.start_index }}–{{ policies.end_index }} of {{ policies.paginator.count }} </div>-->
-
             {% if policies.has_previous %}
             <a class="pagination-action" href="?{% param_replace page=1 %}">
                 <i class="fa fa-angle-double-left" aria-hidden="true"></i>
@@ -168,7 +166,7 @@
 
 
 <footer>
-    © 2019 <a href="/"> Diversity Policy</a>
+    © 2020 <a href="/"> Diversity Policy</a>
 </footer>
 
 

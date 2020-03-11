@@ -418,7 +418,7 @@ $(document).ready(function() {
 });
 
 function openNav() {
-    document.getElementById("aside").style.width = "250px";
+    document.getElementById("aside").style.width = "100%";
 }
 function closeNav() {
     document.getElementById("aside").style.width = "0";

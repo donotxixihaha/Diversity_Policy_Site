@@ -97,7 +97,7 @@ def policy_search(request):
     policies = search(term, fil)
     unfiltered = search(term)
 
-    paginator = Paginator(policies, 10)
+    paginator = Paginator(policies, 15)
 
     page = request.GET.get('page')
 

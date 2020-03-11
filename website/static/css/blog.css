@@ -112,7 +112,7 @@ svg rect{
 
 #aside{
     float:left;
-    width:25%;
+    width:26%;
     top:10px;
 }
 
@@ -162,10 +162,32 @@ svg rect{
 }
 
 .dropdown-two{
-    -moz-column-count:1; /* Firefox */
-    -webkit-column-count:1; /* Safari and Chrome */
-    column-count:1;
+    -moz-column-count:auto; /* Firefox */
+    -webkit-column-count:auto; /* Safari and Chrome */
+    column-count:auto;
     padding-bottom:0;
+}
+
+.dropdown-two::-webkit-scrollbar:horizontal{
+    display:none;
+}
+
+@media (min-width:801px) {
+    .dropdown-two::-webkit-scrollbar{
+        width:17px;
+        height:17px;
+        background-color:#fff;
+    }
+    
+    .dropdown-two::-webkit-scrollbar-track {
+        border:8px solid #fff;
+        background-color:#eee;
+    }
+    
+    .dropdown-two::-webkit-scrollbar-thumb {
+        border:5px solid #fff;
+        background-color:var(--dark-grey);
+    }
 }
 
 
@@ -182,16 +204,18 @@ input#toggle, input#toggle-two{
 
 input#toggle:checked ~ .dropdown, input#toggle-two:checked ~ .dropdown-two{
     height:auto;
+    max-height:635px;
+    padding-right:20px;
     visibility:visible;
+    overflow:scroll;
 }
 
 .count{
     background:#fff;
     font-weight:400;
-    margin-top:-5px;
+    margin-bottom:20px;
     padding:15px;
-    border-top:1px solid rgba(0, 0, 0, 0.125);
-    border-radius:0 0 0.15rem 0.15rem;
+    border-radius:0.15rem;
 }
 
 #rest{
@@ -419,7 +443,7 @@ footer a:hover{
     #aside{
         background:#fff;
         position:fixed;
-        height:100vh;
+        height:100%;
         width:0;
         top:0;
         right:0;
@@ -456,6 +480,10 @@ footer a:hover{
 
     #aside label{
         display:block;
+    }
+
+    input#toggle:checked ~ .dropdown, input#toggle-two:checked ~ .dropdown-two{
+        max-height: 100%;
     }
 
     #rest{

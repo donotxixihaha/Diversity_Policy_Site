@@ -133,7 +133,7 @@ def search(query, filter=None):
             if first_flag:
                 first_flag = False
             else:
-                STMT_FILTER += " OR "
+                STMT_FILTER += " AND "
 
             if i.isnumeric():
                 start_of_yr = i + "-01-01"
@@ -144,6 +144,7 @@ def search(query, filter=None):
                 STMT_FILTER += "school = \'" + i + "\'"
         STMT_FILTER += " AND "
 
+    print(STMT_FILTER)
     seq_term = []
     exact_term = set()
     exclude_term = set()

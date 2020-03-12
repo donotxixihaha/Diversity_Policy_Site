@@ -12,3 +12,9 @@ For potential errors:
    ```
    pip3 install package_name
    ```
+#### Run Django Tests
+To run all the tests in tests website/folder
+In command:
+```
+python3 manage.py test website --keepdb
+```

@@ -22,6 +22,15 @@ $(document).ready(function() {
         }
     });
 
+    $(".panel-three").click(function(){
+        var three = document.querySelector(".icon-three");
+        if(document.querySelector("#toggle-three").checked == false) {
+            three.innerHTML = "–";
+        } else {
+            three.innerHTML = "+";
+        }
+    });
+
     var timeoutID = null;
     // function findMember(str) {
     //     console.log('search: ' + str);
@@ -60,6 +69,7 @@ $(document).ready(function() {
     // Filters
     var years = [];
     var schools = [];
+    var states = [];
     $('.filter').each(function(){
         if(this.getAttribute("data-year") != null){
             var year = this.getAttribute("data-year").split(" ");
@@ -76,6 +86,14 @@ $(document).ready(function() {
             var school = this.getAttribute("data-school").trim();
             if(!schools.includes(school)){
                 schools.push(school);
+            } else {
+                $(this).remove();
+            }
+        }
+        if(this.getAttribute("data-state") != null){
+            var state = this.getAttribute("data-state").trim();
+            if(!states.includes(state)){
+                states.push(state);
             } else {
                 $(this).remove();
             }
@@ -100,6 +118,11 @@ $(document).ready(function() {
         this.innerHTML += "<span> " + school + "</span>";
     });
 
+    $('.dropdown-three label').each(function(){
+        var state = $(this).find("input").data("state").toTitleCase();
+        this.innerHTML += "<span> " + state + "</span>";
+    });
+
 
     // Load/unload filtered content without page refresh
     var filter_url = window.location.search;
@@ -109,10 +132,15 @@ $(document).ready(function() {
             var school = encodeURIComponent(this.getAttribute("data-school").toLowerCase().trim());
             var str2 = "&filter=" + school;
         }
+        if(this.getAttribute("data-state") != null) {
+            var state = encodeURIComponent(this.value.toLowerCase().trim());
+            var str3 = "&filter=" + state;
+        }
         if($(this).prop("checked") == false) {
             $("#loader").show();
             filter_url = filter_url.replace(str, "");
             filter_url = filter_url.replace(str2, "");
+            filter_url = filter_url.replace(str3, "");
             window.history.pushState({}, null, filter_url);
             $("#results").load(filter_url + " #results", function(){
                 $("#loader").hide();
@@ -175,6 +203,19 @@ function sorter2(a,b) {
     if(a.dataset.school > b.dataset.school) return 1;
 }
 sorted2.forEach(e => document.querySelector("#school-filter > form").appendChild(e));
+
+
+var stateFilter = document.querySelectorAll("[data-state]");
+var stateFilterArray = Array.from(stateFilter);
+for(let i=0; i < stateFilterArray.length; i++){
+    stateFilterArray[i].setAttribute("data-state", stateFilterArray[i].getAttribute("data-state").toTitleCase());
+}
+let sorted3 = stateFilterArray.sort(sorter3);
+function sorter3(a,b) {
+    if(a.dataset.state < b.dataset.state) return -1;
+    if(a.dataset.state > b.dataset.state) return 1;
+}
+sorted3.forEach(e => document.querySelector("#state-filter > form").appendChild(e));
 
 // Copy link button
 function fallbackCopyTextToClipboard(text) {

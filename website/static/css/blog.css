@@ -137,8 +137,8 @@ svg rect{
     margin:0px 2px 0px 2px;
 }
 
-.panel, .panel-two{
-	padding:10px 10px 0px 10px;
+.panel, .panel-two, .panel-three{
+	padding:10px;
 	border-top:1px solid #ddd;
 	width:100%;
 	margin:0!important;
@@ -149,11 +149,11 @@ svg rect{
     user-select: none;
 }
 
-.dropdown, .dropdown-two{
+.dropdown, .dropdown-two, .dropdown-three{
     width:100%;
     height:0;
     margin:0;
-    padding:0 10px 10px 10px;
+    padding:0 10px 0px 10px;
     -moz-column-count:2; /* Firefox */
     -webkit-column-count:2; /* Safari and Chrome */
     overflow:hidden;
@@ -161,48 +161,52 @@ svg rect{
     font-size:0.95em;
 }
 
-.dropdown-two{
+.dropdown-two, .dropdown-three{
     -moz-column-count:auto; /* Firefox */
     -webkit-column-count:auto; /* Safari and Chrome */
     column-count:auto;
-    padding-bottom:0;
 }
 
-.dropdown-two::-webkit-scrollbar:horizontal{
+.dropdown-two::-webkit-scrollbar:horizontal,
+.dropdown-three::-webkit-scrollbar:horizontal{
     display:none;
 }
 
 @media (min-width:801px) {
-    .dropdown-two::-webkit-scrollbar{
+    .dropdown-two::-webkit-scrollbar,
+    .dropdown-three::-webkit-scrollbar{
         width:17px;
         height:17px;
         background-color:#fff;
     }
     
-    .dropdown-two::-webkit-scrollbar-track {
+    .dropdown-two::-webkit-scrollbar-track,
+    .dropdown-three::-webkit-scrollbar-track {
         border:8px solid #fff;
         background-color:#eee;
     }
     
-    .dropdown-two::-webkit-scrollbar-thumb {
+    .dropdown-two::-webkit-scrollbar-thumb,
+    .dropdown-three::-webkit-scrollbar-thumb {
         border:5px solid #fff;
         background-color:var(--dark-grey);
     }
 }
 
 
-.icon, .icon-two{
+.icon, .icon-two, .icon-three{
     display:inline-block;
     float:right;
 	font-size:20px;
 	margin-top:-5px;
 }
 
-input#toggle, input#toggle-two{
+input#toggle, input#toggle-two, input#toggle-three{
     display:none;
 }
 
-input#toggle:checked ~ .dropdown, input#toggle-two:checked ~ .dropdown-two{
+input#toggle:checked ~ .dropdown, input#toggle-two:checked ~ .dropdown-two, 
+    input#toggle-three:checked ~ .dropdown-three{
     height:auto;
     max-height:635px;
     padding-right:20px;
@@ -482,7 +486,8 @@ footer a:hover{
         display:block;
     }
 
-    input#toggle:checked ~ .dropdown, input#toggle-two:checked ~ .dropdown-two{
+    input#toggle:checked ~ .dropdown, input#toggle-two:checked ~ .dropdown-two, 
+    input#toggle-three:checked ~ .dropdown-two{
         max-height: 100%;
     }
 

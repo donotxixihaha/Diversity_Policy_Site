@@ -133,13 +133,16 @@ def search(query, filter=None):
             if first_flag:
                 first_flag = False
             else:
-                STMT_FILTER += " AND "
+                STMT_FILTER += " OR "
 
             if i.isnumeric():
                 start_of_yr = i + "-01-01"
                 end_of_yr = i + "-12-31"
                 STMT_FILTER += "(published_date <= \'" + end_of_yr + "\' AND " + \
                                "published_date >= \'" + start_of_yr + "\')"
+            elif "-state" in i:
+                state = i.replace("-state", "")
+                STMT_FILTER += "state = \'" + state + "\'"
             else:
                 STMT_FILTER += "school = \'" + i + "\'"
         STMT_FILTER += " AND "
@@ -244,7 +247,7 @@ def search(query, filter=None):
            "FROM policies " + \
            "WHERE " + STMT_FILTER + "(" + STMT_TERM + ");"
 
-    # print(STMT)
+    print(STMT)
     print("START Fetching...")
     result = []
     with connection.cursor() as cursor:

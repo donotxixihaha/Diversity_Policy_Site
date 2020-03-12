@@ -1,5 +1,13 @@
 $(document).ready(function() {
 
+    $(".school_name").each(function(){
+        $(this).text($(this).text().toTitleCase());
+    });
+
+    $(".card-title").each(function(){
+        $(this).text($(this).text().toTitleCase());
+    });
+
     $("#loader").hide();
 
     // Year filter dropdown
@@ -144,6 +152,12 @@ $(document).ready(function() {
             window.history.pushState({}, null, filter_url);
             $("#results").load(filter_url + " #results", function(){
                 $("#loader").hide();
+                $(".card-title").each(function(){
+                    $(this).text($(this).text().toTitleCase());
+                });
+                $(".school_name").each(function(){
+                    $(this).text($(this).text().toTitleCase());
+                });
                 $(window).scrollTop(0);
             });
         }
@@ -153,6 +167,12 @@ $(document).ready(function() {
             window.history.pushState({}, null, filter_url);
             $("#results").load(filter_url + " #results", function(){
                 $("#loader").hide();
+                $(".card-title").each(function(){
+                    $(this).text($(this).text().toTitleCase());
+                });
+                $(".school_name").each(function(){
+                    $(this).text($(this).text().toTitleCase());
+                });
                 $(window).scrollTop(0);
             });
         }
@@ -170,6 +190,12 @@ $(document).ready(function() {
         window.history.pushState({}, null, this.href);
         $("#results").load(this.href + " #results", function(){
             $("#loader").hide();
+            $(".card-title").each(function(){
+                $(this).text($(this).text().toTitleCase());
+            });
+            $(".school_name").each(function(){
+                $(this).text($(this).text().toTitleCase());
+            });
             $(window).scrollTop(0);
         });
     });
@@ -302,7 +328,7 @@ function getMLA(source) {
         }
     }
     if(source.getAttribute("data-publisher")) {
-        var pub = source.getAttribute("data-publisher").trim();
+        var pub = source.getAttribute("data-publisher").trim().toTitleCase();
         mla += (pub.italics() + ', ');
     }
     if(source.getAttribute("data-pubdate") && source.getAttribute("data-pubdate") != "None") {
@@ -361,7 +387,7 @@ function getChicago(source) {
         }
     }
     if(source.getAttribute("data-publisher")) {
-        chicago += (source.getAttribute("data-publisher").trim() + '. ');
+        chicago += (source.getAttribute("data-publisher").trim() + '. ').toTitleCase();
     }
     if(source.getAttribute("data-pubdate") && source.getAttribute("data-pubdate") != "None") {
         chicago += (formatDate(source.getAttribute("data-pubdate").trim(), "chicago") + '. ');

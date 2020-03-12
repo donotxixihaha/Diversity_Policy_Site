@@ -87,6 +87,21 @@
                     </form>
                 </div>
             </div>
+            <label class="panel-three" for="toggle-three">State<div class="icon-three">+</div></label>
+            <input type="checkbox" id="toggle-three">
+            <div class="dropdown-three">
+                <div id="state-filter">
+                    <form method="GET" class="filters">
+                        <input type="hidden" class="query" name="search" value=""/>
+                        {% for hit in all %}
+                        {% if hit.state is not None %}
+                        <input class="filter" name="filter" type="checkbox" value="{{hit.state}}-state"
+                               data-state="{{hit.state}}"/>
+                        {% endif %}
+                        {% endfor %}
+                    </form>
+                </div>
+            </div>
         </div>
 
         <div id="rest">

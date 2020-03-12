@@ -174,26 +174,6 @@ def search(query, filter=None):
     if STMT_FILTER:
         STMT_FILTER += " AND "
 
-
-        # first_flag = True
-        # for i in filter:
-        #     if first_flag:
-        #         first_flag = False
-        #     else:
-        #         STMT_FILTER += " AND "
-
-        #     if i.isnumeric():
-        #         start_of_yr = i + "-01-01"
-        #         end_of_yr = i + "-12-31"
-        #         STMT_FILTER += "(published_date <= \'" + end_of_yr + "\' AND " + \
-        #                        "published_date >= \'" + start_of_yr + "\')"
-        #     elif "-state" in i:
-        #         state = i.replace("-state", "")
-        #         STMT_FILTER += "state = \'" + state + "\'"
-        #     else:
-        #         STMT_FILTER += "school = \'" + i + "\'"
-        # STMT_FILTER += " AND "
-
     # print(STMT_FILTER)
     seq_term = []
     exact_term = set()
@@ -321,25 +301,6 @@ def search(query, filter=None):
     print("END Fetching.")
     print("length of result:", len(result))
     return result
-
-    # results = policies.query.msearch(query)
-    # db.session.remove()
-    # if(filter==None or len(filter)==0):
-    #     return results
-    # years = []
-    # schools = []
-    # for f in filter:
-    #     if(f[0].isdigit()):
-    #         years.append(f)
-    #     else:
-    #         schools.append(f)
-    # if(years==None or len(years)==0):
-    #     return results.filter(policies.school.in_(schools))
-    # elif(schools==None or len(schools)==0):
-    #     results = results.filter(extract('year', policies.published_date).in_(years))
-    #     return results
-    # else:
-    #     return results.filter((policies.school.in_(schools)&extract('year', policies.published_date).in_(years)))
 
 # Functions similarly to search(), except results are found using prefix, only searching over title field, and object
 # is used differently than the search() object is in the function calling search_suggest()

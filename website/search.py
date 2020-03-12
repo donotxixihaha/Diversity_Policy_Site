@@ -88,8 +88,7 @@ def get_exclude_stmt(field, exclude_term):
 #
 def get_stmt_term(stmt_term, type_name, terms):
     FIELDS = ('title', 'school', 'department', 'administrator', 'author',
-              'state', 'city', 'latitude', 'longitude', 'link', 
-              'tags', 'abstract', 'text')
+              'state', 'city', 'link', 'tags', 'abstract')
     TYPES = ('seq', 'exact', 'exclude')
 
     if type_name not in TYPES:
@@ -266,11 +265,11 @@ def search(query, filter=None):
     STMT_TERM = get_stmt_term(STMT_TERM, "exclude", list(exclude_term))
   
     STMT = "SELECT title, school, department, administrator, author, " + \
-                  "state, city, latitude, longitude, link, " + \
+                  "state, city, link, " + \
                   "(CASE WHEN published_date < '1000-01-01' THEN NULL " + \
                         "ELSE published_date " + \
                    "END) AS published_date, " + \
-                  "tags, abstract, text " + \
+                  "tags, abstract " + \
            "FROM policies " + \
            "WHERE " + STMT_FILTER + "(" + STMT_TERM + ");"
 
@@ -289,13 +288,13 @@ def search(query, filter=None):
                 author = str(row[4] or ''),
                 state = row[5],
                 city = row[6],
-                latitude = row[7],
-                longitude = row[8],
-                link = row[9],
-                published_date = row[10],
-                tags = str(row[11] or ''),
-                abstract = str(row[12] or ''),
-                text = str(row[13] or '')
+                latitude = "",
+                longitude = "",
+                link = row[7],
+                published_date = row[8],
+                tags = str(row[9] or ''),
+                abstract = str(row[10] or ''),
+                text = ""
             )
             result.append(item)
     print("END Fetching.")

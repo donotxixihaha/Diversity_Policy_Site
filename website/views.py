@@ -55,7 +55,7 @@ def build_local_table():
                    tags,\
                    abstract,\
                    text \
-            FROM policies"
+            FROM website_policy"
     print("START")
     with connection.cursor() as cursor:
         cursor.execute(STMT)

@@ -88,8 +88,7 @@ def get_exclude_stmt(field, exclude_term):
 #
 def get_stmt_term(stmt_term, type_name, terms):
     FIELDS = ('title', 'school', 'department', 'administrator', 'author',
-              'state', 'city', 'latitude', 'longitude', 'link', 
-              'tags', 'abstract', 'text')
+              'state', 'city', 'link', 'tags', 'abstract')
     TYPES = ('seq', 'exact', 'exclude')
 
     if type_name not in TYPES:
@@ -114,6 +113,22 @@ def get_stmt_term(stmt_term, type_name, terms):
             stmt_term += cur_stmt
     return stmt_term
 
+# Return sql statement of filter terms, inclusive search.
+#
+# @param filters - a set of filter terms
+# @return stmt_term - a sql statement
+#
+def get_stmt_filter(filters):
+
+    stmt = "("
+    first_flag = True
+    for i in filters:
+        if first_flag:
+            first_flag = False
+        else:
+            stmt += " OR "
+        stmt += i
+    return stmt + ")"
 
 # Search the policies in the database with the matching requirements.
 #
@@ -127,27 +142,38 @@ def search(query, filter=None):
 
     STMT_FILTER = ""
 
+    schools = set()
+    states = set()
+    years = set()
     if filter:
-        first_flag = True
         for i in filter:
-            if first_flag:
-                first_flag = False
-            else:
-                STMT_FILTER += " OR "
-
-            if i.isnumeric():
+            if i.isnumeric():  # date filter
                 start_of_yr = i + "-01-01"
                 end_of_yr = i + "-12-31"
-                STMT_FILTER += "(published_date <= \'" + end_of_yr + "\' AND " + \
-                               "published_date >= \'" + start_of_yr + "\')"
-            elif "-state" in i:
-                state = i.replace("-state", "")
-                STMT_FILTER += "state = \'" + state + "\'"
-            else:
-                STMT_FILTER += "school = \'" + i + "\'"
+                yr = "(published_date <= \'" + end_of_yr + "\' AND " + \
+                     "published_date >= \'" + start_of_yr + "\')"
+                years.add(yr)
+            elif "-state" in i:  # state filter
+                state = "state = \'" + i.replace("-state", "") + "\'"
+                states.add(state)
+            else:  # school filter
+                school = "school = \'" + i + "\'"
+                schools.add(school)
+    if schools:
+        STMT_FILTER += get_stmt_filter(schools)
+    if states:
+        if schools:
+            STMT_FILTER += " AND "
+        STMT_FILTER += get_stmt_filter(states)
+    if years:
+        if schools or states:
+            STMT_FILTER += " AND "
+        STMT_FILTER += get_stmt_filter(years)
+
+    if STMT_FILTER:
         STMT_FILTER += " AND "
 
-    print(STMT_FILTER)
+    # print(STMT_FILTER)
     seq_term = []
     exact_term = set()
     exclude_term = set()
@@ -239,15 +265,15 @@ def search(query, filter=None):
     STMT_TERM = get_stmt_term(STMT_TERM, "exclude", list(exclude_term))
   
     STMT = "SELECT title, school, department, administrator, author, " + \
-                  "state, city, latitude, longitude, link, " + \
+                  "state, city, link, " + \
                   "(CASE WHEN published_date < '1000-01-01' THEN NULL " + \
                         "ELSE published_date " + \
                    "END) AS published_date, " + \
-                  "tags, abstract, text " + \
+                  "tags, abstract " + \
            "FROM policies " + \
            "WHERE " + STMT_FILTER + "(" + STMT_TERM + ");"
 
-    print(STMT)
+    # print(STMT)
     print("START Fetching...")
     result = []
     with connection.cursor() as cursor:
@@ -262,37 +288,18 @@ def search(query, filter=None):
                 author = str(row[4] or ''),
                 state = row[5],
                 city = row[6],
-                latitude = row[7],
-                longitude = row[8],
-                link = row[9],
-                published_date = row[10],
-                tags = str(row[11] or ''),
-                abstract = str(row[12] or ''),
-                text = str(row[13] or '')
+                latitude = "",
+                longitude = "",
+                link = row[7],
+                published_date = row[8],
+                tags = str(row[9] or ''),
+                abstract = str(row[10] or ''),
+                text = ""
             )
             result.append(item)
     print("END Fetching.")
     print("length of result:", len(result))
     return result
-
-    # results = policies.query.msearch(query)
-    # db.session.remove()
-    # if(filter==None or len(filter)==0):
-    #     return results
-    # years = []
-    # schools = []
-    # for f in filter:
-    #     if(f[0].isdigit()):
-    #         years.append(f)
-    #     else:
-    #         schools.append(f)
-    # if(years==None or len(years)==0):
-    #     return results.filter(policies.school.in_(schools))
-    # elif(schools==None or len(schools)==0):
-    #     results = results.filter(extract('year', policies.published_date).in_(years))
-    #     return results
-    # else:
-    #     return results.filter((policies.school.in_(schools)&extract('year', policies.published_date).in_(years)))
 
 # Functions similarly to search(), except results are found using prefix, only searching over title field, and object
 # is used differently than the search() object is in the function calling search_suggest()

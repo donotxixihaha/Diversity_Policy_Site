@@ -260,7 +260,6 @@ input#toggle:checked ~ .dropdown, input#toggle-two:checked ~ .dropdown-two,
 .card-header a{
     color:var(--beige-gold-dark);
     font-weight:700;
-    text-transform:capitalize;
 }
 
 .card h3{
@@ -333,9 +332,9 @@ input#toggle:checked ~ .dropdown, input#toggle-two:checked ~ .dropdown-two,
     border: 1px solid #454545;
 }
 
-.school_name{
+/* .school_name{
     text-transform:capitalize;
-}
+} */
 
 /*-- Pagination --*/
 

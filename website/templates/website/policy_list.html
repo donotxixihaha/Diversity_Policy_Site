@@ -1,0 +1,212 @@
+{% load static %}
+{% load my_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158377968-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-158377968-1');
+    </script>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Diversity Policy</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Overpass:800|Roboto:400,500,700" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}" type="text/css"/>
+</head>
+
+<body>
+
+<section class="container-fluid">
+    <nav class="navbar">
+        <a href="/"><img id="logo" src="{% static 'images/dp-logo-1.svg' %}"/></a>
+        <form method="GET" class="form-inline">
+            <input type="text" id="s_bar2" name="search" class="form-control"
+                   placeholder="Search with keywords here"
+                   aria-label="Search" required>
+            <button class="btn btn-outline-primary my-2" type="submit">
+                <svg width="20" height="20" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="10.5" cy="10.5" r="9" stroke="#9D9D9D" stroke-width="3"></circle>
+                    <rect x="16" y="18.1213" width="3" height="10" rx="1.5" transform="rotate(-45 16 18.1213)"
+                          fill="#9D9D9D"></rect>
+                </svg>
+            </button>
+            <a id="hamburger" href="javascript:void(0)" onclick="openNav()">Filters</a>
+        </form>
+    </nav>
+    <div id="loader">
+        <div id="loader-overlay"></div>
+        <div id="loader-box">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <aside id="aside">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <!-- <div class="count">Showing results {{ policies.start_index }}–{{ policies.end_index }} of {{ policies.paginator.count }} </div> -->
+        <div id="rsum">
+            <h2>Filter by:</h2>
+            <label class="panel" for="toggle">Year<div class="icon">+</div></label>
+            <input type="checkbox" id="toggle">
+            <div class="dropdown">
+                <div id="yr-filter">
+                    <form method="GET" class="filters">
+                        <input type="hidden" class="query" name="search" value=""/>
+                        {% for hit in all %}
+                        {% if hit.published_date is not None %}
+                        <input class="filter" name="filter" type="checkbox" value=""
+                               data-year="{{hit.published_date}}"/>
+                        {% endif %}
+                        {% endfor %}
+                    </form>
+                </div>
+            </div>
+            <label class="panel-two" for="toggle-two">School<div class="icon-two">+</div></label>
+            <input type="checkbox" id="toggle-two">
+            <div class="dropdown-two">
+                <div id="school-filter">
+                    <form method="GET" class="filters">
+                        <input type="hidden" class="query" name="search" value=""/>
+                        {% for hit in all %}
+                        {% if hit.school is not None %}
+                        <input class="filter" name="filter" type="checkbox" value="{{hit.school}}"
+                               data-school="{{hit.school}}"/>
+                        {% endif %}
+                        {% endfor %}
+                    </form>
+                </div>
+            </div>
+            <label class="panel-three" for="toggle-three">State<div class="icon-three">+</div></label>
+            <input type="checkbox" id="toggle-three">
+            <div class="dropdown-three">
+                <div id="state-filter">
+                    <form method="GET" class="filters">
+                        <input type="hidden" class="query" name="search" value=""/>
+                        {% for hit in all %}
+                        {% if hit.state is not None %}
+                        <input class="filter" name="filter" type="checkbox" value="{{hit.state}}-state"
+                               data-state="{{hit.state}}"/>
+                        {% endif %}
+                        {% endfor %}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="rest">
+            <a href="/#contribute">Contribute Policy</a>
+        </div>
+    </aside>
+    <section id="results">
+        {% for hit in policies %}
+        <article class="card border-0" style="padding: 1px">
+            <div class="card-header"><h2><a href="{{ hit.link }}" class="card-title" target="_blank">{{ hit.title }}</a></h2>
+                <input id="copy" class="myBtn" id="{{forloop.counter}}-button" type="button" value="Copy Link"
+                       data-loading-text="Copied" onclick="CopyToClipboard(this.id, '{{hit.link}}')"/>
+                <!-- Trigger/Open The Modal -->
+                <button class="myBtn" onclick="showCites(this)"
+                        data-author="{{hit.author}}"
+                        data-title="{{hit.title}}"
+                        data-publisher="{{hit.school}}"
+                        data-pubdate="{{hit.published_date}}"
+                        data-url="{{hit.link}}"
+                >Create Citations
+                </button>
+                <!-- The Modal -->
+                <div id="myModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2 id="gs_cit-t" class="gs_md_hdr_t">Cite</h2>
+                        <div id="gs_cit-bdy" class="gs_md_bdy">
+                            <div id="gs_citd" aria-live="assertive"
+                                 data-u="/scholar?q=info:{id}:scholar.google.com/&amp;output=cite&amp;scirp={p}&amp;hl=en">
+                                <div id="gs_citt">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row" class="gs_cith">MLA</th>
+                                        </tr>
+                                        <td id="mla"></td>
+                                        <tr>
+                                            <th scope="row" class="gs_cith">APA</th>
+                                        </tr>
+                                        <td id="apa"></td>
+                                        <tr>
+                                            <th scope="row" class="gs_cith">Chicago</th>
+                                        </tr>
+                                        <td id="chicago"></td>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <h3 class="school_name">{{ hit.school }}</h3>
+                <p class="abstract">{{ hit.abstract }}</p>
+            </div>
+        </article>
+        {% endfor %}
+        <div class="pagination justify-content-center">
+            {% if policies.has_previous %}
+            <a class="pagination-action" href="?{% param_replace page=1 %}">
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+            </a>
+            <a class="pagination-action" href="?{% param_replace page=policies.previous_page_number %}">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+            </a>
+            {% endif %}
+
+            {% for num in policies.paginator.page_range %}
+
+            {% if policies.number == num %}
+            <span class="pagination-number pagination-current">{{ num }}</span>
+            {% elif num > policies.number|add:'-3' and num < policies.number|add:'3' %}
+            <a class="pagination-number" href="?{% param_replace page=num %}">{{ num }}</a>
+            {% endif %}
+
+            {% endfor %}
+
+            {% if policies.has_next %}
+
+            <!--There are still issues here with going back and forth but basic pagination is getting there-->
+
+            <a class="pagination-action" href="?{% param_replace page=policies.next_page_number %}">
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+            </a>
+            <a class="pagination-action" href="?{% param_replace page=max_pages %}">
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            </a>
+            {% endif %}
+        </div>
+    </section>
+</section>
+
+
+<footer>
+    © 2020 <a href="/"> Diversity Policy</a>
+</footer>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="{% static 'js/to-title-case.js' %}"></script>
+<script src="{% static 'js/policy_list.js' %}"></script>
+</body>
+</html>
+
